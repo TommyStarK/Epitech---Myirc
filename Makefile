@@ -5,7 +5,7 @@
 ## chambo_e  <chambon.emmanuel@gmail.com>
 ## 
 ## Started on  Wed Apr  8 22:49:16 2015 Emmanuel Chambon
-## Last update Fri Apr 10 09:37:07 2015 Emmanuel Chambon
+## Last update Fri Apr 10 21:06:55 2015 Emmanuel Chambon
 ##
 
 CC		=	gcc -g
@@ -33,7 +33,10 @@ SRC_SERVER	=	$(SERVER)/main.c		\
 			$(COMMON)/rbutils.c		\
 			$(COMMON)/sockutils.c
 
-SRC_CLIENT	=	$(CLIENT)/main.c
+SRC_CLIENT	=	$(CLIENT)/main.c		\
+			$(CLIENT)/commands.c		\
+			$(CLIENT)/commands_bis.c	\
+			$(COMMON)/utils.c
 
 OBJS		=	$(SRC_SERVER:.c=.o)
 

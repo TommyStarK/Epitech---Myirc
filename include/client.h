@@ -5,36 +5,15 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:04:36 2015 THOMAS MILOX
-** Last update Fri Apr 10 18:05:01 2015 THOMAS MILOX
+** Last update Fri Apr 10 21:13:25 2015 Emmanuel Chambon
 */
 
 #ifndef __CLIENT_H__
 # define __CLIENT_H__
 
-# include <errno.h>
-# include <netdb.h>
-# include <stdio.h>
-# include <fcntl.h>
-# include <string.h>
-# include <stdlib.h>
-# include <unistd.h>
-# include <signal.h>
-# include <pthread.h>
-# include <sys/wait.h>
-# include <sys/stat.h>
-# include <arpa/inet.h>
-# include <sys/types.h>
-# include <sys/param.h>
-# include <sys/socket.h>
-# include <sys/sendfile.h>
+# include "common.h"
+# include "network.h"
 
-# define SIZE 									256
-# define ERR_INIT_CLIENT 				"Error: at initialization of client."
-# define ERR_RUNNING 						"00PS: Error happened."
-
-# define ERROR(s)								(fprintf(stderr, "%s\n", s))
-# define USR_OFFLINE(s)					(printf("00 cannot [%s] conenct to IRC server.\r\nUSE /help.\n", s))
-# define CLEANSTRING(s) 				(bzero(s, SIZE))
 /*
 **
 */
