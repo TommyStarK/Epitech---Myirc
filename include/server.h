@@ -1,3 +1,4 @@
+
 /*
 ** server.h for  in /home/chambo_e/epitech/PSU_2014_myirc
 **
@@ -5,7 +6,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:12:08 2015 Emmanuel Chambon
-** Last update Fri Apr 10 05:26:44 2015 Emmanuel Chambon
+** Last update Fri Apr 10 18:03:25 2015 THOMAS MILOX
 */
 
 #ifndef _SERVER_H_
