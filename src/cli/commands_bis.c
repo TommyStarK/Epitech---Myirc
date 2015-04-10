@@ -37,3 +37,10 @@ char								*accept_file_from_user(void *a, void *b)
 	b = b;
 	return (NULL);
 }
+
+char								*quit_client(void *a, void *b)
+{
+	a = a;
+	b = b;
+	return (NULL);
+}

@@ -28,11 +28,13 @@
 # include <sys/socket.h>
 # include <sys/sendfile.h>
 
+# define SIZE 									256
 # define ERR_INIT_CLIENT 				"Error: at initialization of client."
-
+# define ERR_RUNNING 						"00PS: Error happened."
 
 # define ERROR(s)								(fprintf(stderr, "%s\n", s))
-
+# define USR_OFFLINE(s)					(printf("00 cannot [%s] conenct to IRC server.\r\nUSE /help.\n", s))
+# define CLEANSTRING(s) 				(bzero(s, SIZE))
 /*
 **
 */
@@ -55,6 +57,8 @@ typedef struct		s_socket
 
 typedef struct		s_client
 {
+	char 						connected;
+	char						*nickname;
 	t_fct						*cmd;
 	t_socket				*client;
 }									t_client;
@@ -69,5 +73,6 @@ char								*list_users(void *, void *);
 char								*send_msg_to_user(void *, void *);
 char								*send_file_to_user(void *, void *);
 char								*accept_file_from_user(void *, void *);
+char								*quit_client(void *, void *);
 
 #endif /* ! __CLIENT_H__ */
