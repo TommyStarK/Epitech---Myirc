@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:50:53 2015 Emmanuel Chambon
-** Last update Fri Apr 10 17:58:08 2015 Emmanuel Chambon
+** Last update Fri Apr 10 20:20:44 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -35,7 +35,7 @@ void				handle_new_connection(int *max, t_server *serv)
   user->rb = rb_init();
   user->nick = NULL;
   serv->user_index[user->socket] = user;
-  users_push_back(user, &serv->users_alone);
+  user_push_back(user, &serv->users_alone);
 }
 
 void		remove_connection(int *i, t_server *s)
@@ -47,7 +47,7 @@ void		remove_connection(int *i, t_server *s)
     {
       if (t == s->user_index[*i])
 	{
-	  s->users_alone = users_pop(s->user_index[*i], s->users_alone);
+	  s->users_alone = user_pop(s->user_index[*i], s->users_alone);
 	  return ;
 	}
     }
@@ -57,7 +57,7 @@ void		remove_connection(int *i, t_server *s)
 	{
 	  if (t == s->user_index[*i])
 	    {
-	      c->users = users_pop(s->user_index[*i], c->users);
+	      c->users = user_pop(s->user_index[*i], c->users);
 	      return ;
 	    }
 	}
@@ -71,7 +71,19 @@ void		handle_io_connection(int *i, int *max, t_server *serv)
 
   memset(tmp, 0, RB_SIZE);
   if ((rc = recv(*i, tmp, rb_available(serv->user_index[*i]->rb), 0)) > 0)
-    printf("%s\n", tmp);
+    {
+      /* Ecrit le buffer tmp dans le buffer circulaire */
+      rb_write(serv->user_index[*i]->rb, tmp);
+
+      /* Affiche le buffer entier du client */
+      printf("buffer =\n");
+      rb_display(serv->user_index[*i]->rb);
+
+      /* Lit le dernier message dans le buffer circulaire */
+      char *res = rb_read(serv->user_index[*i]->rb);
+      printf("read = \n<%s>", res);
+      free(res);
+    }
   else
     {
       if (rc == 0)

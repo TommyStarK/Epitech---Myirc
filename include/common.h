@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:27:07 2015 Emmanuel Chambon
-** Last update Fri Apr 10 05:26:04 2015 Emmanuel Chambon
+** Last update Fri Apr 10 19:12:48 2015 Emmanuel Chambon
 */
 
 #ifndef _COMMON_H_
@@ -20,7 +20,7 @@
 # include <signal.h>
 # include "network.h"
 
-# define RB_SIZE		4096
+# define RB_SIZE		64
 
 typedef struct s_ring_buffer	t_ring_buffer;
 
@@ -46,5 +46,7 @@ void				*ipvx(struct sockaddr *);
 t_ring_buffer			*rb_init();
 void				rb_free(t_ring_buffer *);
 int				rb_available(t_ring_buffer *);
+void				rb_write(t_ring_buffer *, char *);
+char				*rb_read(t_ring_buffer *);
 
 #endif /* !_COMMON_H_ */

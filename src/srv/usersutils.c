@@ -5,12 +5,12 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 05:53:09 2015 Emmanuel Chambon
-** Last update Fri Apr 10 09:51:44 2015 Emmanuel Chambon
+** Last update Fri Apr 10 19:13:43 2015 Emmanuel Chambon
 */
 
 #include "server.h"
 
-void		users_push_back(t_user *node, t_user **list)
+void		user_push_back(t_user *node, t_user **list)
 {
   t_user	*tmp;
 
@@ -40,7 +40,21 @@ void		user_destroy(t_user *user)
     free(user);
 }
 
-t_user		*users_pop(t_user *user, t_user *container)
+void		user_release(t_user *user)
+{
+  t_user	*tmp;
+  t_user	*backup;
+
+  tmp = user;
+  while (tmp)
+    {
+      backup = tmp->next;
+      user_destroy(tmp);
+      tmp = backup;
+    }
+}
+
+t_user		*user_pop(t_user *user, t_user *container)
 {
   t_user	*tmp;
   t_user	*backup;
@@ -53,10 +67,8 @@ t_user		*users_pop(t_user *user, t_user *container)
     }
   else
     {
-      tmp = container;
-      while (tmp != NULL)
+      for (tmp = container; tmp != NULL; tmp = tmp->next)
 	{
-	  printf("%s\n", tmp->ip);
 	  if (tmp == user)
 	    {
 	      backup->next = user->next;
@@ -64,7 +76,6 @@ t_user		*users_pop(t_user *user, t_user *container)
 	      return (container);
 	    }
 	  backup = tmp;
-	  tmp = tmp->next;
 	}
     }
   return (NULL);
