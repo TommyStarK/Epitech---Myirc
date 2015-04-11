@@ -19,6 +19,7 @@
 # include <string.h>
 # include <stdint.h>
 # include <signal.h>
+# include <termios.h>
 # include "network.h"
 
 # define RB_SIZE		64

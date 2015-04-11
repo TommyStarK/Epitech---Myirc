@@ -45,6 +45,7 @@ typedef struct		s_client
 	fd_set 					*rfds;
 	t_fct						*cmd;
 	t_socket				*client;
+	t_ring_buffer 	*rb;
 }									t_client;
 
 /*
@@ -91,3 +92,4 @@ void                free_it(char **);
 void                free_arrays(char *, ...);
 
 #endif /* ! __CLIENT_H__ */
+

@@ -10,6 +10,21 @@
 
 #include "client.h"
 
+void            non_canon_mode(char c)
+{
+  struct termios t;
+
+  tcgetattr(STDIN_FILENO, &t);
+  if (!c)
+  {
+    t.c_lflag &= ~ICANON;
+    t.c_cc[VMIN] = 1;
+  }
+  else if (c == 1)
+    t.c_lflag |= ICANON;
+  tcsetattr(STDIN_FILENO, TCSANOW, &t);
+}
+
 void            run(t_client *this)
 {
   int           i;
@@ -70,7 +85,10 @@ int 						main()
 
   this.client = init_client(&this);
   this.client->fd = 0;
+  this.rb = rb_init();
+  non_canon_mode(0);
   run(&this);
+  non_canon_mode(1);
   if (this.connected)
     close(this.client->fd);
   printf("Goodbye %s ;)\n", this.nickname);

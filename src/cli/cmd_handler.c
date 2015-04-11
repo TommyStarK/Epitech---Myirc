@@ -90,29 +90,17 @@ int 						unknown_cmd(t_client *this, t_request *r)
 int 						handle_cmd(t_client *this)
 {
   char          c;
-  // int           i;
-  // int 					index;
-  // char          *cmd;
-  t_ring_buffer *rb;
+  int 					index;
   t_request     *r;
 
   c = 1;
-  rb = rb_init();
-  // i = 0;
-  // !(cmd = malloc(2)) ? error("malloc") : bzero(cmd, 2);
-  // while ((c = (char)getchar()))
-  // {
-  //   !(cmd = realloc(cmd, (!*cmd ? 3 : i + 2))) ? error("realloc") : 0;
-  //   if ((cmd[i] = c) == '\n')
-  //   {
-  //     cmd[i + 1] = 0;
-  //     break ;
-  //   }
-  //   ++i;
-  // }
-  // r = parse_cmd(cmd);
   c = (char)getchar();
-  
+  if (c == 127)
+    printf("AAAAAAAAAAAAAAA\n");
+  c == 127 ? rb_write_c(this->rb, '\b') : rb_write_c(this->rb, c);
+  if (rb_available(this->rb) && c != '\n') 
+    return (0);
+  r = parse_cmd(rb_read(this->rb));
   for (index = 0; index < 10; ++index)
     {
       if (!strcmp(r->cmd, this->cmd[index].cmd))

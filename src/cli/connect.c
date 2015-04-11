@@ -44,12 +44,11 @@ char 								*connect_server_handler(t_client *c)
 	*c->fdmax = c->client->fd + 1;
 	FD_SET(c->client->fd, c->rfds);
 	!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
-	sprintf(ret, "%s%c%s%c%c", "NICK", ' ', c->nickname, '\r', '\n');	
+	sprintf(ret, "%s %s\r\n", "NICK", c->nickname);	
 	ssend(c->client->fd, ret);
 	free(ret);
 	!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
-	sprintf(ret, "%s%c%s%c%c%c%c%c%c%s%c%c", "USER", ' ', c->nickname, ' ', '0',
-																 ' ', '*', ' ', ':', c->nickname, '\r', '\n');
+	sprintf(ret, "%s %s 0 * :%s\r\n", "USER", c->nickname, c->nickname);
 	return (ret);
 }
 
