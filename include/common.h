@@ -30,7 +30,7 @@ struct				s_ring_buffer
   char				rb[RB_SIZE];
   char				*rrb;
   char				*wrb;
-  int				available;
+  int					available;
 };
 
 /*
@@ -41,6 +41,8 @@ void				error(const char *);
 **	sockutils.c
 */
 void				*ipvx(struct sockaddr *);
+void   			ssend(int, char *);
+void				snd(char *, int *, int);
 /*
 **	rbutils.c
 */

@@ -5,7 +5,7 @@
 ## chambo_e  <chambon.emmanuel@gmail.com>
 ## 
 ## Started on  Wed Apr  8 22:49:16 2015 Emmanuel Chambon
-## Last update Sat Apr 11 18:19:01 2015 Emmanuel Chambon
+## Last update Sat Apr 11 23:33:32 2015 THOMAS MILOX
 ##
 
 CC		=	gcc -g
@@ -36,10 +36,13 @@ SRC_SERVER	=	$(SERVER)/main.c		\
 SRC_CLIENT	=	$(CLIENT)/main.c		\
 			$(CLIENT)/commands.c		\
 			$(CLIENT)/cmd_handler.c		\
+			$(CLIENT)/connect.c			\
 			$(CLIENT)/commands_bis.c	\
 			$(CLIENT)/utils.c		\
 			$(COMMON)/utils.c		\
-			$(COMMON)/strtowordtab.c
+			$(COMMON)/strtowordtab.c	\
+			$(COMMON)/rbutils.c		\
+			$(COMMON)/sockutils.c
 
 OBJS		=	$(SRC_SERVER:.c=.o)
 

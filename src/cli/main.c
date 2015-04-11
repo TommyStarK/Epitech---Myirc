@@ -10,38 +10,32 @@
 
 #include "client.h"
 
-int             end_client(t_client *this, char *input)
+void            run(t_client *this)
 {
-  free(input);
-  if (this->connected)
-    close(this->client->fd);
-  printf("Goodbye %s ;)\n", this->nickname);
-  return (0);
-}
+  int           i;
+  int           ret;
+  int           fdmax;
+  fd_set        read_fds;
 
-int             connect_it(t_socket *s, const char *ip, const char *port)
-{
-  addinf  hints;
-  addinf  *info;
-  addinf  *l;
-  int     ret;
-
-  memset(&hints, 0, sizeof(struct addrinfo));
-  hints.ai_family = AF_UNSPEC;
-  hints.ai_socktype = SOCK_STREAM;
-  if ((ret = getaddrinfo(ip, port, &hints, &info)) != 0)
-      error(gai_strerror(ret));
-  l = info;
-  while (l)
+  fdmax = this->client->fd + 1;
+  FD_ZERO(&read_fds);
+  FD_SET(this->client->fd, &read_fds);
+  this->fdmax = &fdmax;
+  this->rfds = &read_fds;
+  for (;;)
+  {
+    if (select(fdmax, &read_fds, NULL, NULL, NULL) == -1)
+      error("select");
+    for (i = 0; i <= fdmax; ++i)
     {
-      if ((s->fd = socket(l->ai_family, l->ai_socktype, l->ai_protocol)) == -1)
-        l = l->ai_next;
-      if (connect(s->fd, l->ai_addr, l->ai_addrlen) == -1)
-        l = l->ai_next;
-      break ;
+      if (FD_ISSET(i, &read_fds))
+      {
+        ret = (!i ? handle_cmd(this) : 0);
+        if (ret == 9 || ret < 0)
+          return ;
+      }
     }
-  freeaddrinfo(info);
-  return (!l ? 0 : 1);
+  } 
 }
 
 t_socket				*init_client(t_client *this)
@@ -63,6 +57,8 @@ t_socket				*init_client(t_client *this)
   if (!(ret = malloc(sizeof(t_socket))))
     error("malloc");
   this->cmd = cmd;
+  this->fdmax = NULL;
+  this->rfds = NULL;
   this->connected = 0;
   this->nickname = getlogin();
   return (ret);
@@ -70,21 +66,13 @@ t_socket				*init_client(t_client *this)
 
 int 						main()
 {
-  int 					i;
-  size_t 				n;
-  char 					*input;
   t_client 			this;
 
-  n = 0;
-  input = NULL;
   this.client = init_client(&this);
-  while (write(1, "irc> ", 5) && getline(&input, &n, stdin))
-    {
-      i = handle_cmd(&this, input);
-      if (i == 9)
-      	break ;
-      else if (i < 0)
-      	return (-1);
-    }
-  return (end_client(&this, input));
+  this.client->fd = 0;
+  run(&this);
+  if (this.connected)
+    close(this.client->fd);
+  printf("Goodbye %s ;)\n", this.nickname);
+  return (0);
 }
