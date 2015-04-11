@@ -41,6 +41,8 @@ void				error(const char *);
 **	sockutils.c
 */
 void				*ipvx(struct sockaddr *);
+void   			ssend(int, char *);
+void				snd(char *, int *, int);
 /*
 **	rbutils.c
 */
