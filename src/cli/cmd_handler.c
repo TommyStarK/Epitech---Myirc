@@ -17,10 +17,12 @@ void            pars_hdl(t_request *ret, char **cmd, char *in, int flag)
   i = 0;
   if (flag)
   {
+    (void)cmd;
     ret->cmd = strdup(in);
     ret->arg = NULL;
-    return ((void)cmd);
+    return ;
   }
+  (void)in;
   ret->cmd = strdup(cmd[i++]);
   while (cmd[i++]);
   if (!(ret->arg = malloc(sizeof(char *) * i)))
@@ -30,7 +32,6 @@ void            pars_hdl(t_request *ret, char **cmd, char *in, int flag)
     ret->arg[i - 1] = strdup(cmd[i]);
   }
   ret->arg[i] = NULL;
-  return ((void)in);
 }
 
 
@@ -44,14 +45,14 @@ t_request       *parse_cmd(char *in)
     error("malloc");
   if (!in || !(*in) || (*in) == '\n')
   {
-    ret->cmd = strdup("\n\0");
+    ret->cmd = strdup("\r\n\0");
     ret->arg = NULL;
     return (ret);
   }
   in[strlen(in) - 1] = '\0';
   tmp = str_to_tab(in, ' ');
   *tmp[0] == '/' ? pars_hdl(ret, tmp, in , 0) : pars_hdl(ret, tmp, in , 1);
-  free_arrays("ts\0", tmp, in);
+  free_arrays("ts", tmp, in);
   return (ret);
 }
 
@@ -65,11 +66,11 @@ int 						known_cmd(t_client *this, t_request *r, int index)
 	if (!strncmp(formated_cmd, "00PS", 4))
 		{
 			printf("%s\n", formated_cmd);
-			free_arrays("sstr\0", formated_cmd, r->cmd, r->arg, r);
+			free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
 			return (0);
 		}
 	printf("[%s]\n", formated_cmd);
-	free_arrays("sstr\0", formated_cmd, r->cmd, r->arg, r);
+	free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
   return (1);
 }
 
@@ -83,11 +84,27 @@ int 						unknown_cmd(t_client *this, t_request *r)
 }
 
 
-int 						handle_cmd(t_client *this, char *cmd)
+int 						handle_cmd(t_client *this)
 {
+  char          c;
+  int           i;
   int 					index;
+  char          *cmd;
   t_request     *r;
 
+  c = 1;
+  i = 0;
+  !(cmd = malloc(2)) ? error("malloc") : bzero(cmd, 2);
+  while ((c = (char)getchar()))
+  {
+    !(cmd = realloc(cmd, (!*cmd ? 3 : i + 2))) ? error("realloc") : 0;
+    if ((cmd[i] = c) == '\n')
+    {
+      cmd[i + 1] = 0;
+      break ;
+    }
+    ++i;
+  }
   r = parse_cmd(cmd);
   for (index = 0; index < 10; ++index)
     {

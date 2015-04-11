@@ -12,7 +12,7 @@
 
 void            free_it(char **it)
 {
-  int             i;
+  int           i;
 
   i = 0;
   if (!i || !(*it))
@@ -27,9 +27,9 @@ void            free_it(char **it)
 
 void            free_arrays(char *fmt, ...)
 {
-  va_list                 ap;
-  char                            *s;
-  char                            **t;
+  va_list       ap;
+  char          *s;
+  char          **t;
   t_request       *r;
 
   va_start(ap, fmt);

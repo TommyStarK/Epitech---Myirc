@@ -17,6 +17,13 @@
 typedef struct addrinfo 				addinf;
 typedef struct sockaddr_storage stor;
 
+typedef struct    s_request
+{
+  char            *cmd;
+  char            **arg;
+}                 t_request;
+
+
 typedef struct		s_fct
 {
 	char						*cmd;
@@ -34,36 +41,36 @@ typedef struct		s_client
 {
 	char 						connected;
 	char						*nickname;
+	int 						*fdmax;
+	fd_set 					*rfds;
 	t_fct						*cmd;
 	t_socket				*client;
 }									t_client;
-
-typedef struct                                  s_request
-{
-  char                                            *cmd;
-  char                                            **arg;
-}                                                               t_request;
 
 /*
 ** main.c
 */
 
 t_socket						*init_client(t_client *);
-int             		connect_it(t_socket *, const char *, const char *);
-int             		end_client(t_client *, char *);
+void 								run(t_client *);
 /*
 ** cmd_handler.c
 */
-int 								handle_cmd(t_client *, char *);
+int 								handle_cmd(t_client *);
 int 								known_cmd(t_client *, t_request *, int);
 int 								unknown_cmd(t_client *, t_request *);
 t_request       		*parse_cmd(char *);
 void            		pars_hdl(t_request *, char **, char *, int);
 
 /*
-** commands.c
+** connect.c
 */
 char								*connect_server(void *, void *);
+int             		connect_it(t_socket *, const char *, const char *);
+
+/*
+** commands.c
+*/
 char								*change_nickname(void *, void *);
 char								*list_channels(void *, void *);
 char								*join_channel(void *, void *);
@@ -79,8 +86,8 @@ char								*send_file_to_user(void *, void *);
 char								*accept_file_from_user(void *, void *);
 char								*quit_client(void *, void *);
 
-char                            **str_to_tab(char *, char);
-void                            free_it(char **);
-void                            free_arrays(char *, ...);
+char                **str_to_tab(char *, char);
+void                free_it(char **);
+void                free_arrays(char *, ...);
 
 #endif /* ! __CLIENT_H__ */

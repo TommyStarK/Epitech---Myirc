@@ -36,6 +36,7 @@ SRC_SERVER	=	$(SERVER)/main.c		\
 SRC_CLIENT	=	$(CLIENT)/main.c		\
 			$(CLIENT)/commands.c		\
 			$(CLIENT)/cmd_handler.c		\
+			$(CLIENT)/connect.c			\
 			$(CLIENT)/commands_bis.c	\
 			$(CLIENT)/utils.c		\
 			$(COMMON)/utils.c		\

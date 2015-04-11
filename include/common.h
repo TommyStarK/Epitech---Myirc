@@ -30,7 +30,7 @@ struct				s_ring_buffer
   char				rb[RB_SIZE];
   char				*rrb;
   char				*wrb;
-  int				available;
+  int					available;
 };
 
 /*
