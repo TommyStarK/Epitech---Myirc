@@ -5,16 +5,17 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:50:53 2015 Emmanuel Chambon
-** Last update Sat Apr 11 00:28:42 2015 Emmanuel Chambon
+** Last update Sat Apr 11 20:45:56 2015 Emmanuel Chambon
 */
 
 #include "server.h"
 
 void				refuse_new_connection(t_user *user, t_server *s)
 {
-  // send error msg full
-  user_destroy(user);
+  ssend(user->socket, "400 : Too much users connected\r\n");
   s->user_index[user->socket] = NULL;
+  FD_CLR(user->socket, &s->master);
+  user_destroy(user);
 }
 
 void				handle_new_connection(int *max, t_server *serv)
@@ -41,7 +42,7 @@ void				handle_new_connection(int *max, t_server *serv)
   if (serv->user_index[MAX_CONN - 1])
     refuse_new_connection(user, serv);
   else
-    user_push_back(user, &serv->users_alone);
+    user_push(user, &serv->users_alone);
 }
 
 void		remove_connection(int *i, t_server *s)

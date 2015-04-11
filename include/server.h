@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:12:08 2015 Emmanuel Chambon
-** Last update Sat Apr 11 18:20:13 2015 Emmanuel Chambon
+** Last update Sat Apr 11 20:46:08 2015 Emmanuel Chambon
 */
 
 #ifndef _SERVER_H_
@@ -15,7 +15,7 @@
 # include "network.h"
 
 # define MAX_USERS		2
-# define MAX_CONN		MAX_USERS + 4
+# define MAX_CONN		MAX_USERS + 5
 
 typedef struct s_user		t_user;
 typedef struct s_channel	t_channel;
@@ -70,9 +70,9 @@ void				handler_server(t_server *);
 /*
 **      usersutils.c
 */
-void				user_push_back(t_user *, t_user **);
-void				user_destroy(t_user *);
+void				user_push(t_user *, t_user **);
 t_user				*user_pop(t_user *, t_user *);
+void				user_destroy(t_user *);
 void				user_release(t_user *);
 
 #endif /* !_SERVER_H_ */
