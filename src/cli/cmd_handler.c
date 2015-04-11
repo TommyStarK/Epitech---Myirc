@@ -70,6 +70,7 @@ int 						known_cmd(t_client *this, t_request *r, int index)
 			return (0);
 		}
 	printf("[%s]\n", formated_cmd);
+  ssend(this->client->fd, formated_cmd);
 	free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
   return (1);
 }
