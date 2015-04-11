@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:27:07 2015 Emmanuel Chambon
-** Last update Sat Apr 11 18:50:02 2015 Emmanuel Chambon
+** Last update Sun Apr 12 00:28:30 2015 Emmanuel Chambon
 */
 
 #ifndef _COMMON_H_
@@ -48,6 +48,7 @@ t_ring_buffer			*rb_init();
 void				rb_free(t_ring_buffer *);
 int				rb_available(t_ring_buffer *);
 void				rb_write(t_ring_buffer *, char *);
+void				rb_write_c(t_ring_buffer *, char);
 char				*rb_read(t_ring_buffer *);
 
 #endif /* !_COMMON_H_ */

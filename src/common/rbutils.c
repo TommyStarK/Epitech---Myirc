@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 14:11:57 2015 Emmanuel Chambon
-** Last update Sat Apr 11 18:37:51 2015 Emmanuel Chambon
+** Last update Sun Apr 12 00:27:00 2015 Emmanuel Chambon
 */
 
 #include "common.h"
@@ -47,6 +47,14 @@ void			rb_write(t_ring_buffer *ring, char *str)
       ring->wrb = &ring->rb[(((size_t)ring->wrb + 1)
 			     - (size_t)ring->rb) % RB_SIZE];
     }
+}
+
+void			rb_write_c(t_ring_buffer *ring, char c)
+{
+  ring->wrb = (ring->wrb) ? ring->wrb : ring->rb;
+  *ring->wrb = c;
+  ring->wrb = &ring->rb[(((size_t)ring->wrb + 1)
+			 - (size_t)ring->rb) % RB_SIZE];
 }
 
 char			*rb_read(t_ring_buffer *ring)
