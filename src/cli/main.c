@@ -10,40 +10,44 @@
 
 #include "client.h"
 
-int 						known_cmd(t_client *this, char *cmd, int index)
+int             end_client(t_client *this, char *input)
 {
-  (void)this;
-  (void)cmd;
-  printf("[%d]\n", index);
-  return (index);
-}
-
-int 						unknown_cmd(t_client *this, char *cmd)
-{
+  free(input);
   if (this->connected)
-    {
-      printf("CONNECTED TO SERVER\n");
-    }
-  return (fprintf(stderr, "%s: Connect to IRC server first.\n", cmd));
+    close(this->client->fd);
+  printf("Goodbye %s ;)\n", this->nickname);
+  return (0);
 }
 
-int 						handle_cmd(t_client *this, char *cmd)
+int             connect_it(t_socket *s, const char *ip, const char *port)
 {
-  int 					index;
+  addinf  hints;
+  addinf  *info;
+  addinf  *l;
+  int     ret;
 
-  cmd[strlen(cmd) - 1] = '\0';
-  for (index = 0; index < 10; ++index)
+  memset(&hints, 0, sizeof(struct addrinfo));
+  hints.ai_family = AF_UNSPEC;
+  hints.ai_socktype = SOCK_STREAM;
+  if ((ret = getaddrinfo(ip, port, &hints, &info)) != 0)
+      error(gai_strerror(ret));
+  l = info;
+  while (l)
     {
-      if (!strcmp(cmd, this->cmd[index].cmd))
-  	return (known_cmd(this, cmd, index));
+      if ((s->fd = socket(l->ai_family, l->ai_socktype, l->ai_protocol)) == -1)
+        l = l->ai_next;
+      if (connect(s->fd, l->ai_addr, l->ai_addrlen) == -1)
+        l = l->ai_next;
+      break ;
     }
-  return (unknown_cmd(this, cmd));
+  freeaddrinfo(info);
+  return (!l ? 0 : 1);
 }
 
-void						*init_client(t_client *this)
+t_socket				*init_client(t_client *this)
 {
   t_socket			*ret;
-  t_fct	cmd[] = {
+  static t_fct	cmd[] = {
     {"/server", &connect_server},
     {"/nick", &change_nickname},
     {"/list", &list_channels},
@@ -64,15 +68,6 @@ void						*init_client(t_client *this)
   return (ret);
 }
 
-
-int 						end_client(t_client *this, char *input)
-{
-  free(input);
-  if (this->connected)
-    close(this->client->fd);
-  printf("Goodbye %s ;)\n", this->nickname);
-  return (0);
-}
 int 						main()
 {
   int 					i;

@@ -16,7 +16,7 @@
 
 # define MAX_CONN		128
 
-typedef struct s_user		t_user;
+typedef struct s_user		  t_user;
 typedef struct s_channel	t_channel;
 typedef struct s_server		t_server;
 
@@ -53,7 +53,7 @@ int8_t				g_run;
 **	main.c
 */
 int				usage();
-void				error(char *);
+void				error(const char *);
 /*
 **	server.c
 */

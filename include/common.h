@@ -12,6 +12,7 @@
 # define _COMMON_H_
 
 # include <stdlib.h>
+# include <stdarg.h>
 # include <errno.h>
 # include <stdio.h>
 # include <unistd.h>
@@ -32,10 +33,19 @@ struct				s_ring_buffer
   int				available;
 };
 
+typedef struct 					s_request
+{
+	char 						*cmd;
+	char						**arg;
+} 								t_request;
+
 /*
 **	utils.c
 */
-void				error(char *);
+void				error(const char *);
+char 				**str_to_tab(char *, char);
+void 				free_it(char **);
+void 				free_arrays(char *, ...);
 /*
 **	sockutils.c
 */
