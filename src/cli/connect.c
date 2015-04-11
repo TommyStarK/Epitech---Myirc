@@ -35,23 +35,37 @@ int             connect_it(t_socket *s, const char *ip, const char *port)
   return (!l ? 0 : 1);
 }
 
+char 								*connect_server_handler(t_client *c, t_request *r)
+{
+	char 							*ret;
+
+	ret = NULL;
+	c->connected = 1;
+	c->(*fdmax) = c->client->fd + 1;
+	FD_SET(c->client->fd, c->rfds);
+	!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
+	sprintf(ret, "%s%c%s%c%c", "NICK", ' ', c->nickname, '\r', '\n');	
+	
+}
+
 char								*connect_server(void *this, void *request)
 {
 	char 							*ret;
+	char 							**tmp;
 	t_client					*c;
 	t_request 				*r;
 
 	ret = NULL;
 	c = (t_client *)this;
 	r = (t_request *)request;
+	if (!(tmp = str_to_tab(r->arg[0], ':')))
+		return (ret = strdup("00PS: str_to_tab() failed :(.")
+	r->arg = tmp;
+	free_arrays("t", tmp);
 	if (!r->arg || !r->arg[0] || !r->arg[1])
 		return (ret = strdup("00PS: Error [/server] invalid cmd.\r\nCf help."));
 	if (!connect_it(c->client, r->arg[0], r->arg[1]))
 		return (ret = strdup("00PS: Error cannot connect specifed IP/PORT :(."));		
-	c->connected = 1;
-	if (!(ret = malloc(256)))
-		error("malloc");
-	bzero(ret, 256);
-	sprintf(ret, "%s%c%s%c%s\r\n", "SERVER", ' ', r->arg[0], ' ', r->arg[1]);
+	ret = connect_server_handler(c ,r);
 	return (ret);
 }
