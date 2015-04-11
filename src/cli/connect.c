@@ -49,7 +49,7 @@ char 								*connect_server_handler(t_client *c)
 	free(ret);
 	!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
 	sprintf(ret, "%s%c%s%c%c%c%c%c%c%s%c%c", "USER", ' ', c->nickname, ' ', '0',
-																			 ' ', '*', ':', c->nickname, '\r', '\n');
+																 ' ', '*', ' ', ':', c->nickname, '\r', '\n');
 	return (ret);
 }
 

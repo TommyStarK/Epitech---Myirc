@@ -69,7 +69,6 @@ int 						known_cmd(t_client *this, t_request *r, int index)
 			free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
 			return (0);
 		}
-	printf("[%s]\n", formated_cmd);
   ssend(this->client->fd, formated_cmd);
 	free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
   return (1);
@@ -80,7 +79,10 @@ int 						unknown_cmd(t_client *this, t_request *r)
   if (this->connected)
     {
       printf("CONNECTED TO SERVER\n");
+      free_arrays("str", r->cmd, r->arg, r);;
+      return (1);
     }
+  free_arrays("str", r->cmd, r->arg, r);
   return (fprintf(stderr, "%s: Connect to IRC server first.\n", r->cmd));
 }
 
@@ -88,25 +90,29 @@ int 						unknown_cmd(t_client *this, t_request *r)
 int 						handle_cmd(t_client *this)
 {
   char          c;
-  int           i;
-  int 					index;
-  char          *cmd;
+  // int           i;
+  // int 					index;
+  // char          *cmd;
+  t_ring_buffer *rb;
   t_request     *r;
 
   c = 1;
-  i = 0;
-  !(cmd = malloc(2)) ? error("malloc") : bzero(cmd, 2);
-  while ((c = (char)getchar()))
-  {
-    !(cmd = realloc(cmd, (!*cmd ? 3 : i + 2))) ? error("realloc") : 0;
-    if ((cmd[i] = c) == '\n')
-    {
-      cmd[i + 1] = 0;
-      break ;
-    }
-    ++i;
-  }
-  r = parse_cmd(cmd);
+  rb = rb_init();
+  // i = 0;
+  // !(cmd = malloc(2)) ? error("malloc") : bzero(cmd, 2);
+  // while ((c = (char)getchar()))
+  // {
+  //   !(cmd = realloc(cmd, (!*cmd ? 3 : i + 2))) ? error("realloc") : 0;
+  //   if ((cmd[i] = c) == '\n')
+  //   {
+  //     cmd[i + 1] = 0;
+  //     break ;
+  //   }
+  //   ++i;
+  // }
+  // r = parse_cmd(cmd);
+  c = (char)getchar();
+  
   for (index = 0; index < 10; ++index)
     {
       if (!strcmp(r->cmd, this->cmd[index].cmd))
