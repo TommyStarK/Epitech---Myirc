@@ -5,10 +5,17 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:50:53 2015 Emmanuel Chambon
-** Last update Fri Apr 10 20:20:44 2015 Emmanuel Chambon
+** Last update Sat Apr 11 00:28:42 2015 Emmanuel Chambon
 */
 
 #include "server.h"
+
+void				refuse_new_connection(t_user *user, t_server *s)
+{
+  // send error msg full
+  user_destroy(user);
+  s->user_index[user->socket] = NULL;
+}
 
 void				handle_new_connection(int *max, t_server *serv)
 {
@@ -17,25 +24,24 @@ void				handle_new_connection(int *max, t_server *serv)
   t_user			*user;
   char				ip[INET6_ADDRSTRLEN];
 
-  /* Faire degager
-  if (serv->user_index[MAX_CONN - 1])
-  */
   if (!(user = malloc(sizeof(t_user))))
     error("malloc");
   len = sizeof(r);
-  printf("%d %d\n", serv->socket, len);
   if ((user->socket = accept(serv->socket, (struct sockaddr *)&r, &len)) == -1)
     error("accept");
   FD_SET(user->socket, &serv->master);
   if (user->socket > *max)
     *max = user->socket;
-  user->ip = strdup(inet_ntop(r.ss_family,
-			      ipvx((struct sockaddr *)&r),
+  user->ip = strdup(inet_ntop(r.ss_family, ipvx((struct sockaddr *)&r),
 			      ip, INET6_ADDRSTRLEN));
   user->rb = rb_init();
   user->nick = NULL;
+  user->real = NULL;
   serv->user_index[user->socket] = user;
-  user_push_back(user, &serv->users_alone);
+  if (serv->user_index[MAX_CONN - 1])
+    refuse_new_connection(user, serv);
+  else
+    user_push_back(user, &serv->users_alone);
 }
 
 void		remove_connection(int *i, t_server *s)
@@ -48,6 +54,7 @@ void		remove_connection(int *i, t_server *s)
       if (t == s->user_index[*i])
 	{
 	  s->users_alone = user_pop(s->user_index[*i], s->users_alone);
+	  s->user_index[*i] = NULL;
 	  return ;
 	}
     }
@@ -58,6 +65,7 @@ void		remove_connection(int *i, t_server *s)
 	  if (t == s->user_index[*i])
 	    {
 	      c->users = user_pop(s->user_index[*i], c->users);
+	      s->user_index[*i] = NULL;
 	      return ;
 	    }
 	}

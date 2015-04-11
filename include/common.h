@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:27:07 2015 Emmanuel Chambon
-** Last update Fri Apr 10 19:12:48 2015 Emmanuel Chambon
+** Last update Sat Apr 11 18:18:43 2015 Emmanuel Chambon
 */
 
 #ifndef _COMMON_H_
@@ -33,19 +33,10 @@ struct				s_ring_buffer
   int				available;
 };
 
-typedef struct 					s_request
-{
-	char 						*cmd;
-	char						**arg;
-} 								t_request;
-
 /*
 **	utils.c
 */
 void				error(const char *);
-char 				**str_to_tab(char *, char);
-void 				free_it(char **);
-void 				free_arrays(char *, ...);
 /*
 **	sockutils.c
 */

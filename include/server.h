@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:12:08 2015 Emmanuel Chambon
-** Last update Fri Apr 10 19:13:55 2015 Emmanuel Chambon
+** Last update Sat Apr 11 18:20:13 2015 Emmanuel Chambon
 */
 
 #ifndef _SERVER_H_
@@ -14,9 +14,10 @@
 # include "common.h"
 # include "network.h"
 
-# define MAX_CONN		128
+# define MAX_USERS		2
+# define MAX_CONN		MAX_USERS + 4
 
-typedef struct s_user		  t_user;
+typedef struct s_user		t_user;
 typedef struct s_channel	t_channel;
 typedef struct s_server		t_server;
 
@@ -24,6 +25,7 @@ struct				s_user
 {
   char				*ip;
   char				*nick;
+  char				*real;
   int				socket;
   t_ring_buffer			*rb;
   t_user			*next;
@@ -53,7 +55,6 @@ int8_t				g_run;
 **	main.c
 */
 int				usage();
-void				error(const char *);
 /*
 **	server.c
 */

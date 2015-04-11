@@ -1,11 +1,11 @@
 /*
 ** server.c for  in /home/chambo_e/epitech/PSU_2014_myirc
-1;2802;0c**
+**
 ** Made by Emmanuel Chambon
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:32:00 2015 Emmanuel Chambon
-** Last update Fri Apr 10 19:04:42 2015 Emmanuel Chambon
+** Last update Sat Apr 11 18:38:30 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -48,6 +48,8 @@ int			bind_port(char *port)
   if (!i)
     error("bind");
   freeaddrinfo(s);
+  if (listen(sock, BACKLOG))
+    error("listen");
   return (sock);
 }
 
@@ -75,6 +77,7 @@ t_server		*init_server(char *port)
 {
   t_server		*serv;
   struct sigaction	si;
+  int			i;
 
   if (!(serv = malloc(sizeof(t_server))))
     error("malloc");
@@ -82,6 +85,8 @@ t_server		*init_server(char *port)
   serv->users_alone = NULL;
   serv->port = strdup(port);
   serv->socket = bind_port(port);
+  for (i = 0; i < MAX_CONN; i++)
+    serv->user_index[i] = NULL;
   FD_ZERO(&serv->master);
   FD_SET(serv->socket, &serv->master);
   g_run = 1;
@@ -94,7 +99,5 @@ t_server		*init_server(char *port)
       fprintf(stderr, "Memory will not be freed and socket won't be close");
       fprintf(stderr, " at server close\n");
     }
-  if (listen(serv->socket, BACKLOG))
-    error("listen");
   return (serv);
 }

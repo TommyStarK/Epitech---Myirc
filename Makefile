@@ -5,7 +5,7 @@
 ## chambo_e  <chambon.emmanuel@gmail.com>
 ## 
 ## Started on  Wed Apr  8 22:49:16 2015 Emmanuel Chambon
-## Last update Sat Apr 11 02:32:09 2015 THOMAS MILOX
+## Last update Sat Apr 11 18:19:01 2015 Emmanuel Chambon
 ##
 
 CC		=	gcc -g
@@ -37,6 +37,7 @@ SRC_CLIENT	=	$(CLIENT)/main.c		\
 			$(CLIENT)/commands.c		\
 			$(CLIENT)/cmd_handler.c		\
 			$(CLIENT)/commands_bis.c	\
+			$(CLIENT)/utils.c		\
 			$(COMMON)/utils.c		\
 			$(COMMON)/strtowordtab.c
 

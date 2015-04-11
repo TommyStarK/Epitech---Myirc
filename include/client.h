@@ -5,7 +5,7 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:04:36 2015 THOMAS MILOX
-** Last update Fri Apr 10 21:13:25 2015 Emmanuel Chambon
+** Last update Sat Apr 11 18:18:45 2015 Emmanuel Chambon
 */
 
 #ifndef __CLIENT_H__
@@ -38,6 +38,11 @@ typedef struct		s_client
 	t_socket				*client;
 }									t_client;
 
+typedef struct                                  s_request
+{
+  char                                            *cmd;
+  char                                            **arg;
+}                                                               t_request;
 
 /*
 ** main.c
@@ -73,5 +78,9 @@ char								*send_msg_to_user(void *, void *);
 char								*send_file_to_user(void *, void *);
 char								*accept_file_from_user(void *, void *);
 char								*quit_client(void *, void *);
+
+char                            **str_to_tab(char *, char);
+void                            free_it(char **);
+void                            free_arrays(char *, ...);
 
 #endif /* ! __CLIENT_H__ */
