@@ -5,12 +5,12 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 05:53:09 2015 Emmanuel Chambon
-** Last update Fri Apr 10 19:13:43 2015 Emmanuel Chambon
+** Last update Sat Apr 11 20:46:30 2015 Emmanuel Chambon
 */
 
 #include "server.h"
 
-void		user_push_back(t_user *node, t_user **list)
+void		user_push(t_user *node, t_user **list)
 {
   t_user	*tmp;
 
