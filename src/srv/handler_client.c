@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:50:53 2015 Emmanuel Chambon
-** Last update Sun Apr 12 12:49:12 2015 Emmanuel Chambon
+** Last update Sun Apr 12 19:49:16 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -68,7 +68,6 @@ void		remove_connection(t_user *user, t_server *s)
 	  if (t == user)
 	    {
 	      s->user_index[user->socket] = NULL;
-	      printf("deleted on channel\n");
 	      c->users = user_pop(user, c->users);
 	      return ;
 	    }
@@ -83,8 +82,7 @@ void		interpret_command(char *command, t_user *user, t_server *serv)
 
   if ((cr = strstr(command, "\r\n")))
     *cr = 0;
-  printf("input = <%s>\n", command);
-  for (i = 0; i < MAX_CMD; i++)
+  for (i = 0; i < MAX_CMD - 1; i++)
     {
       if (!(strncmp(command, serv->cmd[i], strlen(serv->cmd[i]))))
   	{
@@ -92,4 +90,6 @@ void		interpret_command(char *command, t_user *user, t_server *serv)
   	  return ;
   	}
     }
+  if (i == MAX_CMD - 1)
+    def(command, user, serv);
 }

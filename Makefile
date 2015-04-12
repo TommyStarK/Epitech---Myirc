@@ -5,7 +5,7 @@
 ## chambo_e  <chambon.emmanuel@gmail.com>
 ## 
 ## Started on  Wed Apr  8 22:49:16 2015 Emmanuel Chambon
-## Last update Sun Apr 12 12:50:54 2015 Emmanuel Chambon
+## Last update Sun Apr 12 20:06:10 2015 Emmanuel Chambon
 ##
 
 CC		=	gcc -g
@@ -34,7 +34,12 @@ SRC_SERVER	=	$(SERVER)/main.c		\
 			$(SERVER)/channelsutils.c	\
 			$(SERVER)/socketutils.c		\
 			$(SERVER)/commands.c		\
+			$(SERVER)/file_related.c	\
+			$(SERVER)/channels_related.c	\
+			$(SERVER)/misc_related.c	\
+			$(SERVER)/welcoming.c		\
 			$(COMMON)/rbutils.c		\
+			$(COMMON)/strtowordtab.c	\
 			$(COMMON)/rbinit.c		\
 			$(COMMON)/utils.c		\
 			$(COMMON)/sockutils.c

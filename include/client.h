@@ -5,7 +5,7 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:04:36 2015 THOMAS MILOX
-** Last update Sun Apr 12 18:55:02 2015 THOMAS MILOX
+** Last update Sun Apr 12 20:24:36 2015 Emmanuel Chambon
 */
 
 #ifndef __CLIENT_H__
@@ -56,6 +56,7 @@ t_socket			*init_client(t_client *);
 void				run(t_client *);
 int				handle_cmd(t_client *);
 int				read_answer(t_client *);
+void				end_client(t_client *, int);
 /*
 ** cmd_handler.c
 */

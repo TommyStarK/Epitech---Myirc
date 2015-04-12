@@ -5,7 +5,7 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:05:41 2015 THOMAS MILOX
-** Last update Sun Apr 12 18:54:42 2015 THOMAS MILOX
+** Last update Sun Apr 12 20:23:15 2015 Emmanuel Chambon
 */
 
 #include "client.h"
@@ -38,11 +38,11 @@ int		read_answer(t_client *this)
   return (1);
 }
 
-int             handle_cmd(t_client *this)
+int		handle_cmd(t_client *this)
 {
-  char          c;
-  int           index;
-  t_request     *r;
+  char		c;
+  int		index;
+  t_request	*r;
 
   c = (char)getchar();
   if (c == 127)
@@ -65,19 +65,19 @@ int             handle_cmd(t_client *this)
   return (unknown_cmd(this, r));
 }
 
-void            run(t_client *c)
+void		run(t_client *c)
 {
-  int           i;
-  int           ret;
-  int           fdmax;
-  fd_set        read_fds;
+  int		i;
+  int		ret;
+  int		fdmax;
+  fd_set	read_fds;
 
   fdmax = 1;
   FD_ZERO(&read_fds);
   FD_SET(0, &read_fds);
   c->fdmax = &fdmax;
   c->rfds = &read_fds;
-  for ( ; ; )
+  while (1)
   {
     FD_ZERO(c->rfds);
     c->client->fd < 0 ? 0 : FD_SET(c->client->fd, c->rfds);

@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:12:08 2015 Emmanuel Chambon
-** Last update Sun Apr 12 13:00:01 2015 Emmanuel Chambon
+** Last update Sun Apr 12 17:04:03 2015 Emmanuel Chambon
 */
 
 #ifndef _SERVER_H_
@@ -96,6 +96,8 @@ int				bind_port(char *);
 **      channelsutils.c
 */
 void				channel_push(t_channel *, t_channel **);
+void				channel_destroy(t_channel *);
+void				channel_release(t_channel *);
 /*
 **      usersutils.c
 */

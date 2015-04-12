@@ -5,14 +5,14 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Sat Apr 11 01:41:50 2015 THOMAS MILOX
-** Last update Sun Apr 12 17:50:00 2015 THOMAS MILOX
+** Last update Sun Apr 12 20:20:04 2015 Emmanuel Chambon
 */
 
 #include "client.h"
 
 void		pars_hdl(t_request *ret, char **cmd, char *in, int flag)
 {
-  int           i;
+  int		i;
 
   i = 0;
   if (flag)
@@ -36,8 +36,8 @@ void		pars_hdl(t_request *ret, char **cmd, char *in, int flag)
 
 t_request	*parse_cmd(char *in)
 {
-  char          **tmp;
-  t_request     *ret;
+  char		**tmp;
+  t_request	*ret;
 
   tmp = NULL;
   if (!(ret = malloc(sizeof(t_request))))
@@ -57,9 +57,9 @@ t_request	*parse_cmd(char *in)
 
 void		unknown_cmd_handler(t_client *c, t_request *r)
 {
-  int           i;
-  int           s;
-  char          *f;
+  int		i;
+  int		s;
+  char		*f;
 
   f = strdup(r->cmd);
   if (s = strlen(f), r->arg && r->arg[0])
@@ -102,9 +102,9 @@ int		unknown_cmd(t_client *this, t_request *r)
   return (1);
 }
 
-int             known_cmd(t_client *this, t_request *r, int index)
+int		known_cmd(t_client *this, t_request *r, int index)
 {
-  char          *formated_cmd;
+  char		*formated_cmd;
 
   formated_cmd = this->cmd[index].op(this, r);
   if (!strncmp(formated_cmd, "00PS", 4))

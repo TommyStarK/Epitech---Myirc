@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:32:00 2015 Emmanuel Chambon
-** Last update Sun Apr 12 12:51:19 2015 Emmanuel Chambon
+** Last update Sun Apr 12 17:03:33 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -22,8 +22,8 @@ void			release_server(t_server *serv)
     free(serv->port);
   if (serv && serv->socket)
     close(serv->socket);
-  /* if (serv && serv->channels) */
-  /*   release_channels(); */
+  if (serv && serv->channels)
+    channel_release(serv->channels);
   if (serv && serv->users_alone)
     user_release(serv->users_alone);
   if (serv)

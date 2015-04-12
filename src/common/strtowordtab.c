@@ -5,10 +5,10 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 23:37:55 2015 THOMAS MILOX
-** Last update Fri Apr 10 23:42:21 2015 THOMAS MILOX
+** Last update Sun Apr 12 18:12:48 2015 Emmanuel Chambon
 */
 
-#include "client.h"
+#include "common.h"
 
 int	count_words(char *str, char sep)
 {
@@ -45,7 +45,7 @@ void	*my_xmalloc(size_t size)
 
   dest = malloc(size);
   if (!dest)
-    fprintf(stderr, "Error: malloc().\n");
+    error("malloc");
   return (dest);
 }
 

@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 05:53:09 2015 Emmanuel Chambon
-** Last update Sun Apr 12 10:07:48 2015 Emmanuel Chambon
+** Last update Sun Apr 12 16:59:03 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -33,6 +33,10 @@ void		user_destroy(t_user *user)
     free(user->ip);
   if (user && user->nick)
     free(user->nick);
+  if (user && user->real)
+    free(user->real);
+  if (user && user->chan)
+    free(user->chan);
   if (user && user->socket)
     close(user->socket);
   if (user && user->rb)

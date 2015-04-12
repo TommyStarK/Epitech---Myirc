@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:27:07 2015 Emmanuel Chambon
-** Last update Sun Apr 12 12:25:11 2015 Emmanuel Chambon
+** Last update Sun Apr 12 20:25:23 2015 Emmanuel Chambon
 */
 
 #ifndef _COMMON_H_
@@ -40,11 +40,12 @@ struct				s_ring_buffer
 **	utils.c
 */
 void				error(const char *);
+char                            **str_to_tab(char *, char);
 /*
 **	sockutils.c
 */
 void				*ipvx(struct sockaddr *);
-void   			ssend(int, char *);
+void				ssend(int, char *);
 void				snd(char *, int *, int);
 /*
 **	rbutils.c
