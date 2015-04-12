@@ -27,7 +27,7 @@ char								*change_nickname(void *a, void *b)
 		c->nickname = strdup(r->arg[0]);
 		return (ret);
 	}
-	return (strdup("00PS: Error [/nick] invalid cmd.\r\nCf help."));
+	return (strdup("NICK\r\n"));
 }
 
 char								*list_channels(void __attribute__((unused))*a, void *b)
@@ -62,7 +62,7 @@ char								*join_channel(void *a, void *b)
 		c->channel = strdup(r->arg[0]);
 		return (ret);
 	}
-	return (strdup("00PS: Error [/part] invalid cmd.\r\nCf help."));
+	return (strdup("JOIN\r\n"));
 }
 
 char								*leave_channel(void __attribute__((unused))*a, void *b)
@@ -78,5 +78,5 @@ char								*leave_channel(void __attribute__((unused))*a, void *b)
 		sprintf(ret, "PART %s\r\n", r->arg[0]);
 		return (ret);
 	}
-	return (strdup("00PS: Error [/part] invalid cmd.\r\nCf help."));
+	return (strdup("PART\r\n"));
 }
