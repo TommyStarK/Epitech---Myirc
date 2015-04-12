@@ -97,7 +97,7 @@ int 						unknown_cmd(t_client *this, t_request *r)
       }
       return (1);
     }
-  fprintf(stderr, "%s: Connect to IRC server first.\n", r->cmd);
+  printf("%s: Connect to IRC server first.\n", r->cmd);
   free_arrays("str", r->cmd, r->arg, r);
   return (1);
 }

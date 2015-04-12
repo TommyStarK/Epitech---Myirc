@@ -12,10 +12,11 @@
 
 int             read_answer(t_client *this)
 {
+  int     i;
   char    tmp[RB_SIZE];
 
  memset(tmp, 0, RB_SIZE);
- if (recv(this->client->fd, tmp, rb_available(this->rs), 0) > 0)
+ if ((i = recv(this->client->fd, tmp, rb_available(this->rs), 0)) > 0)
   {
     rb_write(this->rs, tmp);
     if (rb_at(this->rs, -1) == '\n' && rb_at(this->rs, -2) == '\r')
@@ -23,7 +24,9 @@ int             read_answer(t_client *this)
         printf("%s", rb_read(this->rs));
         return (1);
       }
-    } 
+    }
+  else
+    !i ? printf("00PS: Connection closed by server.\n") : error("recv");
   return (1);
 }
 
@@ -61,7 +64,7 @@ void            run(t_client *this)
   int           fdmax;
   fd_set        read_fds;
 
-  fdmax = this->client->fd + 1;
+  fdmax = 1;
   FD_ZERO(&read_fds);
   FD_SET(0, &read_fds);
   this->fdmax = &fdmax;
@@ -70,7 +73,7 @@ void            run(t_client *this)
   {
     if (select(fdmax, &read_fds, NULL, NULL, NULL) == -1)
       error("select");
-    for (i = 0; i <= fdmax; ++i)
+    for (i = 0; i <= *this->fdmax; i++)
     {
       if (FD_ISSET(i, &read_fds))
       {
@@ -114,7 +117,7 @@ int 						main()
   t_client 			this;
 
   this.client = init_client(&this);
-  this.client->fd = 0;
+  this.client->fd = -1;
   this.rb = rb_init();
   this.rs = rb_init();
   non_canon_mode(0);

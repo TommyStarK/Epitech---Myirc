@@ -10,9 +10,13 @@
 
 #include "client.h"
 
-char								*list_users(void __attribute__((unused))*a,
-																void __attribute__((unused))*b)
+char								*list_users(void *a, void __attribute__((unused))*b)
 {
+	t_client 					*c;
+
+	c = (t_client *)a;
+	if (!c->connected)
+		return (strdup("00PS: Connect to IRC server first."));
 	return (strdup("NAMES\r\n"));
 }
 
@@ -47,14 +51,17 @@ char								*send_msg_to_user(void __attribute__((unused))*a,
 	return (strdup("PRIVMSG\r\n"));
 }
 
-char								*send_file_to_user(void __attribute__((unused))*a,
-																															 void *b)
+char								*send_file_to_user(void *a, void *b)
 {
 	char 							*ret;
+	t_client 					*c;
 	t_request 				*r;
 
 	ret = NULL;
+	c = (t_client *)a;
 	r = (t_request *)b;
+	if (!c->connected)
+		return (strdup("00PS: Connect to IRC server first."));
 	if (r->arg && r->arg[0] && r->arg[1])
 	{
 		!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
@@ -64,14 +71,17 @@ char								*send_file_to_user(void __attribute__((unused))*a,
 	return (strdup("SENDFILE\r\n"));
 }
 
-char								*accept_file_from_user(void __attribute__((unused))*a,
-																																 void *b)
+char								*accept_file_from_user(void *a, void *b)
 {
 	char 							*ret;
+	t_client 					*c;
 	t_request 				*r;
 
 	ret = NULL;
+	c = (t_client *)a;
 	r = (t_request *)b;
+	if (!c->connected)
+		return (strdup("00PS: Connect to IRC server first."));
 	if (r->arg && r->arg[0])
 	{
 		!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
