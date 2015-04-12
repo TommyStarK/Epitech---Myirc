@@ -5,7 +5,7 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Sat Apr 11 21:49:24 2015 THOMAS MILOX
-** Last update Sat Apr 11 21:49:33 2015 THOMAS MILOX
+** Last update Sun Apr 12 13:10:56 2015 Emmanuel Chambon
 */
 
 #include "client.h"
@@ -44,7 +44,7 @@ char 								*connect_server_handler(t_client *c)
 	*c->fdmax = c->client->fd + 1;
 	FD_SET(c->client->fd, c->rfds);
 	!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
-	sprintf(ret, "%s %s\r\n", "NICK", c->nickname);	
+	sprintf(ret, "%s %s\r\n", "NICK", c->nickname);
 	ssend(c->client->fd, ret);
 	free(ret);
 	!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
@@ -76,7 +76,7 @@ char								*connect_server(void *this, void *request)
 		r->arg[2] = NULL;
 	}
 	if (!connect_it(c->client, r->arg[0], r->arg[1]))
-		return (strdup("00PS: Error cannot connect specifed IP/PORT :(."));		
+		return (strdup("00PS: Error cannot connect specifed IP/PORT :(."));
 	ret = connect_server_handler(c);
 	return (ret);
 }

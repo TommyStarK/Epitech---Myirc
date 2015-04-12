@@ -5,14 +5,14 @@
 ## chambo_e  <chambon.emmanuel@gmail.com>
 ## 
 ## Started on  Wed Apr  8 22:49:16 2015 Emmanuel Chambon
-## Last update Sun Apr 12 04:59:07 2015 Emmanuel Chambon
+## Last update Sun Apr 12 12:50:54 2015 Emmanuel Chambon
 ##
 
 CC		=	gcc -g
 
 INC		=	include
 
-CFLAGS		=	-W -Wall -Wextra -I$(INC)
+CFLAGS		=	-W -Wall -Wextra -I$(INC) -D_GNU_SOURCE
 
 RM		=	rm -f
 
@@ -29,20 +29,26 @@ NAME_CLIENT	=	client
 SRC_SERVER	=	$(SERVER)/main.c		\
 			$(SERVER)/server.c		\
 			$(SERVER)/handler_server.c	\
+			$(SERVER)/handler_client.c	\
 			$(SERVER)/usersutils.c		\
+			$(SERVER)/channelsutils.c	\
+			$(SERVER)/socketutils.c		\
 			$(SERVER)/commands.c		\
 			$(COMMON)/rbutils.c		\
+			$(COMMON)/rbinit.c		\
+			$(COMMON)/utils.c		\
 			$(COMMON)/sockutils.c
 
 SRC_CLIENT	=	$(CLIENT)/main.c		\
 			$(CLIENT)/commands.c		\
 			$(CLIENT)/cmd_handler.c		\
-			$(CLIENT)/connect.c			\
+			$(CLIENT)/connect.c		\
 			$(CLIENT)/commands_bis.c	\
 			$(CLIENT)/utils.c		\
 			$(COMMON)/utils.c		\
 			$(COMMON)/strtowordtab.c	\
 			$(COMMON)/rbutils.c		\
+			$(COMMON)/rbinit.c		\
 			$(COMMON)/sockutils.c
 
 OBJS		=	$(SRC_SERVER:.c=.o)

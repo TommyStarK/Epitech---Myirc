@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:27:07 2015 Emmanuel Chambon
-** Last update Sun Apr 12 04:51:07 2015 Emmanuel Chambon
+** Last update Sun Apr 12 12:25:11 2015 Emmanuel Chambon
 */
 
 #ifndef _COMMON_H_
@@ -24,6 +24,7 @@
 # include "network.h"
 
 # define RB_SIZE		4096
+# define _UNUSED_		__attribute__((unused))
 
 typedef struct s_ring_buffer	t_ring_buffer;
 

@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 05:53:09 2015 Emmanuel Chambon
-** Last update Sat Apr 11 20:46:30 2015 Emmanuel Chambon
+** Last update Sun Apr 12 10:07:48 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -24,6 +24,7 @@ void		user_push(t_user *node, t_user **list)
       tmp->next = node;
     }
   node->next = NULL;
+  node->list = list;
 }
 
 void		user_destroy(t_user *user)
@@ -79,4 +80,26 @@ t_user		*user_pop(t_user *user, t_user *container)
 	}
     }
   return (NULL);
+}
+
+void		user_transfer(t_user *user, t_user **list)
+{
+  t_user	*tmp;
+  t_user	*backup;
+
+  if (*user->list == user)
+    *user->list = user->next;
+  else
+    {
+      for (tmp = *user->list; tmp != NULL; tmp = tmp->next)
+	{
+	  if (tmp == user)
+	    {
+	      backup->next = user->next;
+	      break ;
+	    }
+	  backup = tmp;
+	}
+    }
+  user_push(user, list);
 }

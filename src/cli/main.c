@@ -5,7 +5,7 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:05:41 2015 THOMAS MILOX
-** Last update Fri Apr 10 21:20:14 2015 THOMAS MILOX
+** Last update Sun Apr 12 13:11:09 2015 Emmanuel Chambon
 */
 
 #include "client.h"
@@ -82,7 +82,7 @@ void            run(t_client *this)
           return ;
       }
     }
-  } 
+  }
 }
 
 t_socket				*init_client(t_client *this)
