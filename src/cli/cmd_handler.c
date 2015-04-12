@@ -27,13 +27,12 @@ void            pars_hdl(t_request *ret, char **cmd, char *in, int flag)
   while (cmd[i++]);
   if (!(ret->arg = malloc(sizeof(char *) * i)))
     error("malloc");
-  for (i = 1; cmd[i] != NULL; ++i)
+  for (i = 1; cmd[i] != NULL; i++)
   {
     ret->arg[i - 1] = strdup(cmd[i]);
   }
-  ret->arg[i] = NULL;
+  ret->arg[i - 1] = NULL;
 }
-
 
 t_request       *parse_cmd(char *in)
 {
@@ -69,9 +68,11 @@ int 						known_cmd(t_client *this, t_request *r, int index)
 			free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
 			return (0);
 		}
+  printf("SEND: [%s]\n", formated_cmd);
   ssend(this->client->fd, formated_cmd);
+  printf("SENT: [%s]\n", formated_cmd);
 	free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
-  return (1);
+  return (index == 9 ? 9 : 1);
 }
 
 int 						unknown_cmd(t_client *this, t_request *r)
@@ -82,8 +83,9 @@ int 						unknown_cmd(t_client *this, t_request *r)
       free_arrays("str", r->cmd, r->arg, r);;
       return (1);
     }
+  fprintf(stderr, "%s: Connect to IRC server first.\n", r->cmd);
   free_arrays("str", r->cmd, r->arg, r);
-  return (fprintf(stderr, "%s: Connect to IRC server first.\n", r->cmd));
+  return (1);
 }
 
 
@@ -93,18 +95,17 @@ int 						handle_cmd(t_client *this)
   int 					index;
   t_request     *r;
 
-  c = 1;
   c = (char)getchar();
   if (c == 127)
   {
     write(1, "\b \b", 3);
     rb_delete_last(this->rb);
-    return (0);
+    return (1);
   }
   c != 27 ? putchar(c) : getchar();
   c != 27 ? rb_write_c(this->rb, c) : getchar();
   if (rb_available(this->rb) && c != '\n')
-    return (0);
+    return (1);
   r = parse_cmd(rb_read(this->rb));
   for (index = 0; index < 10; ++index)
     {
