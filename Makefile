@@ -5,7 +5,7 @@
 ## chambo_e  <chambon.emmanuel@gmail.com>
 ## 
 ## Started on  Wed Apr  8 22:49:16 2015 Emmanuel Chambon
-## Last update Sun Apr 12 02:17:57 2015 THOMAS MILOX
+## Last update Sun Apr 12 04:59:07 2015 Emmanuel Chambon
 ##
 
 CC		=	gcc -g
@@ -30,6 +30,7 @@ SRC_SERVER	=	$(SERVER)/main.c		\
 			$(SERVER)/server.c		\
 			$(SERVER)/handler_server.c	\
 			$(SERVER)/usersutils.c		\
+			$(SERVER)/commands.c		\
 			$(COMMON)/rbutils.c		\
 			$(COMMON)/sockutils.c
 

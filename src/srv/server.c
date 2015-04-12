@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:32:00 2015 Emmanuel Chambon
-** Last update Sat Apr 11 18:38:30 2015 Emmanuel Chambon
+** Last update Sun Apr 12 04:57:57 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -73,14 +73,36 @@ void			release_server(t_server *serv)
     free(serv);
 }
 
-t_server		*init_server(char *port)
+void			set_handler(t_server *serv)
 {
-  t_server		*serv;
-  struct sigaction	si;
+  serv->cmd[0] = "NICK";
+  serv->cmd[1] = "USER";
+  serv->cmd[2] = "LIST";
+  serv->cmd[3] = "JOIN";
+  serv->cmd[4] = "PART";
+  serv->cmd[5] = "NAMES";
+  serv->cmd[6] = "PRIVMSG";
+  serv->cmd[7] = "SENDFILE";
+  serv->cmd[8] = "ACCEPTFILE";
+  serv->cmd[9] = "QUIT";
+  serv->cmd[10] = NULL;
+  serv->cmd_handler[0] = &nick;
+  serv->cmd_handler[1] = &user;
+  serv->cmd_handler[2] = &list;
+  serv->cmd_handler[3] = &join;
+  serv->cmd_handler[4] = &part;
+  serv->cmd_handler[5] = &names;
+  serv->cmd_handler[6] = &msg;
+  serv->cmd_handler[7] = &sendfile;
+  serv->cmd_handler[8] = &acceptfile;
+  serv->cmd_handler[9] = &quit;
+  serv->cmd_handler[10] = NULL;
+}
+
+void			set_server(t_server *serv, char *port)
+{
   int			i;
 
-  if (!(serv = malloc(sizeof(t_server))))
-    error("malloc");
   serv->channels = NULL;
   serv->users_alone = NULL;
   serv->port = strdup(port);
@@ -89,6 +111,17 @@ t_server		*init_server(char *port)
     serv->user_index[i] = NULL;
   FD_ZERO(&serv->master);
   FD_SET(serv->socket, &serv->master);
+  set_handler(serv);
+}
+
+t_server		*init_server(char *port)
+{
+  t_server		*serv;
+  struct sigaction	si;
+
+  if (!(serv = malloc(sizeof(t_server))))
+    error("malloc");
+  set_server(serv, port);
   g_run = 1;
   si.sa_handler = close_handler;
   sigemptyset(&si.sa_mask);

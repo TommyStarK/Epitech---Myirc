@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:50:53 2015 Emmanuel Chambon
-** Last update Sun Apr 12 02:11:51 2015 Emmanuel Chambon
+** Last update Sun Apr 12 06:24:13 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -38,6 +38,7 @@ void				handle_new_connection(int *max, t_server *serv)
   user->rb = rb_init();
   user->nick = NULL;
   user->real = NULL;
+  user->auth = 0;
   serv->user_index[user->socket] = user;
   if (serv->user_index[MAX_CONN - 1])
     refuse_new_connection(user, serv);
@@ -45,17 +46,17 @@ void				handle_new_connection(int *max, t_server *serv)
     user_push(user, &serv->users_alone);
 }
 
-void		remove_connection(int *i, t_server *s)
+void		remove_connection(t_user *user, t_server *s)
 {
   t_channel	*c;
   t_user	*t;
 
   for (t = s->users_alone; t != NULL; t = t->next)
     {
-      if (t == s->user_index[*i])
+      if (t == user)
 	{
-	  s->users_alone = user_pop(s->user_index[*i], s->users_alone);
-	  s->user_index[*i] = NULL;
+	  s->user_index[user->socket] = NULL;
+	  s->users_alone = user_pop(user, s->users_alone);
 	  return ;
 	}
     }
@@ -63,47 +64,82 @@ void		remove_connection(int *i, t_server *s)
     {
       for (t = s->users_alone; t; t = t->next)
 	{
-	  if (t == s->user_index[*i])
+	  if (t == user)
 	    {
-	      c->users = user_pop(s->user_index[*i], c->users);
-	      s->user_index[*i] = NULL;
+	      s->user_index[user->socket] = NULL;
+	      c->users = user_pop(user, c->users);
 	      return ;
 	    }
 	}
     }
 }
 
-void		handle_io_connection(int *i, int *max, t_server *serv)
+void		interpret_command(char *command, t_user *user, t_server *serv)
+{
+  char		*cr;
+
+  if ((cr = strstr(command, "\r\n")))
+    *cr = 0;
+  printf("command = <%s>\n", command);
+}
+
+int		substring_pattern(char *str, char *pattern)
+{
+  int		i;
+  char		*res;
+
+  i = 0;
+  res = str;
+  while ((res = strstr(res, pattern)))
+    {
+      res++;
+      i++;
+    }
+  return (i);
+}
+
+void		input_interpret(t_user *user, t_server *serv)
+{
+  char		*input;
+  char		*tok;
+
+  input = rb_read(user->rb);
+  if (substring_pattern(input, "\r\n") > 1)
+    {
+      tok = input;
+      for (tok = strtok(tok, "\r\n"); tok; (tok = strtok(tok, "\r\n")))
+	{
+	  interpret_command(tok, user, serv);
+	  tok = NULL;
+	}
+   }
+  else
+    interpret_command(input, user, serv);
+  free(input);
+}
+
+void		handle_io_connection(t_user *user, t_server *serv)
 {
   char		tmp[RB_SIZE];
   int		rc;
 
   memset(tmp, 0, RB_SIZE);
-  if ((rc = recv(*i, tmp, rb_available(serv->user_index[*i]->rb), 0)) > 0)
+  if ((rc = recv(user->socket, tmp, rb_available(user->rb), 0)) > 0)
     {
-      /* Ecrit le buffer tmp dans le buffer circulaire */
-      rb_write(serv->user_index[*i]->rb, tmp);
-
-      rb_delete_last(serv->user_index[*i]->rb);
-
-      /* Affiche le buffer entier du client */
-      /* printf("buffer =\n"); */
-      rb_display(serv->user_index[*i]->rb);
-
-      /* Lit le dernier message dans le buffer circulaire */
-      char *res = rb_read(serv->user_index[*i]->rb);
-      /* printf("read = \n<%s>", res); */
-      free(res);
+      rb_write(user->rb, tmp);
+      if (rb_at(user->rb, -1) == '\n'
+	  && rb_at(user->rb, -1) == '\r')
+	input_interpret(user, serv);
     }
   else
     {
       if (rc == 0)
-	printf("%s Disconnected\n", (serv->user_index[*i]->nick)
-	       ? serv->user_index[*i]->nick : serv->user_index[*i]->ip);
+	printf("%s Disconnected\n", (user->nick)
+	       ? user->nick : user->ip);
       else
       	perror("recv");
-      remove_connection(i, serv);
-      FD_CLR(*i, &serv->master);
+      FD_CLR(user->socket, &serv->master);
+      remove_connection(user, serv);
     }
 }
 
@@ -114,7 +150,7 @@ void		watch_sockets(int *i, int *max, fd_set *catch, t_server *serv)
       if (*i == serv->socket)
 	handle_new_connection(max, serv);
       else
-      	handle_io_connection(i, max, serv);
+      	handle_io_connection(serv->user_index[*i], serv);
     }
 }
 
