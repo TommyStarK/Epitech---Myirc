@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 14:11:57 2015 Emmanuel Chambon
-** Last update Sun Apr 12 02:14:33 2015 Emmanuel Chambon
+** Last update Sun Apr 12 03:00:46 2015 Emmanuel Chambon
 */
 
 #include "common.h"
@@ -99,8 +99,10 @@ void			rb_set_at(t_ring_buffer *ring, int idx, char c)
 
 void			rb_delete_last(t_ring_buffer *ring)
 {
-  ring->wrb = &ring->rb[(((size_t)ring->wrb - 1)
-			 - (size_t)ring->rb) % RB_SIZE];
+  ring->wrb = (ring->wrb == ring->rrb)
+    ? ring->wrb
+    : &ring->rb[(((size_t)ring->wrb - 1)
+		 - (size_t)ring->rb) % RB_SIZE];
 }
 
 void			rb_display(t_ring_buffer *ring)

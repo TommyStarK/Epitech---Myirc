@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:50:53 2015 Emmanuel Chambon
-** Last update Sat Apr 11 20:45:56 2015 Emmanuel Chambon
+** Last update Sun Apr 12 02:11:51 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -84,13 +84,15 @@ void		handle_io_connection(int *i, int *max, t_server *serv)
       /* Ecrit le buffer tmp dans le buffer circulaire */
       rb_write(serv->user_index[*i]->rb, tmp);
 
+      rb_delete_last(serv->user_index[*i]->rb);
+
       /* Affiche le buffer entier du client */
-      printf("buffer =\n");
+      /* printf("buffer =\n"); */
       rb_display(serv->user_index[*i]->rb);
 
       /* Lit le dernier message dans le buffer circulaire */
       char *res = rb_read(serv->user_index[*i]->rb);
-      printf("read = \n<%s>", res);
+      /* printf("read = \n<%s>", res); */
       free(res);
     }
   else

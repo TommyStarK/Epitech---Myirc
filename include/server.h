@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 04:12:08 2015 Emmanuel Chambon
-** Last update Sat Apr 11 20:46:08 2015 Emmanuel Chambon
+** Last update Sun Apr 12 00:08:59 2015 Emmanuel Chambon
 */
 
 #ifndef _SERVER_H_
@@ -23,10 +23,11 @@ typedef struct s_server		t_server;
 
 struct				s_user
 {
+  char				auth;
+  int				socket;
   char				*ip;
   char				*nick;
   char				*real;
-  int				socket;
   t_ring_buffer			*rb;
   t_user			*next;
 };
