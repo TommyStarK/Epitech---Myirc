@@ -5,29 +5,53 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:05:41 2015 THOMAS MILOX
-** Last update Fri Apr 10 21:20:14 2015 Emmanuel Chambon
+** Last update Fri Apr 10 21:20:14 2015 THOMAS MILOX
 */
 
 #include "client.h"
 
-void            non_canon_mode(char c)
+int             read_answer(t_client *this)
 {
-  struct termios t;
+  char    tmp[RB_SIZE];
 
-  tcgetattr(STDIN_FILENO, &t);
-  if (!c)
+ memset(tmp, 0, RB_SIZE);
+ if (recv(this->client->fd, tmp, rb_available(this->rs), 0) > 0)
   {
-    t.c_lflag &= ~ICANON;
-    t.c_lflag &= ~ECHO;
-    t.c_cc[VMIN] = 1;
+    rb_write(this->rs, tmp);
+    if (rb_at(this->rs, -1) == '\n' && rb_at(this->rs, -2) == '\r')
+      {
+        printf("%s", rb_read(this->rs));
+        return (1);
+      }
+    } 
+  return (1);
+}
 
+int             handle_cmd(t_client *this)
+{
+  char          c;
+  int           index;
+  t_request     *r;
+
+  c = (char)getchar();
+  if (c == 127)
+  {
+    write(1, "\b \b", 3);
+    rb_delete_last(this->rb);
+    return (1);
   }
-  else if (c == 1)
+  c != 27 ? putchar(c) : getchar();
+  c != 27 ? rb_write_c(this->rb, c) : getchar();
+ fflush(stdout);
+  if (rb_available(this->rb) && c != '\n')
+    return (1);
+  r = parse_cmd(rb_read(this->rb));
+  for (index = 0; index < 10; ++index)
     {
-      t.c_lflag |= ICANON;
-      t.c_lflag |= ECHO;
+      if (!strcmp(r->cmd, this->cmd[index].cmd))
+        return (known_cmd(this, r, index));
     }
-  tcsetattr(STDIN_FILENO, TCSANOW, &t);
+  return (unknown_cmd(this, r));
 }
 
 void            run(t_client *this)
@@ -39,7 +63,7 @@ void            run(t_client *this)
 
   fdmax = this->client->fd + 1;
   FD_ZERO(&read_fds);
-  FD_SET(this->client->fd, &read_fds);
+  FD_SET(0, &read_fds);
   this->fdmax = &fdmax;
   this->rfds = &read_fds;
   for (;;)
@@ -50,7 +74,7 @@ void            run(t_client *this)
     {
       if (FD_ISSET(i, &read_fds))
       {
-        ret = (!i ? handle_cmd(this) : 0);
+        ret = (!i ? handle_cmd(this) : read_answer(this));
         if (ret == 9 || ret < 0)
           return ;
       }
@@ -80,7 +104,7 @@ t_socket				*init_client(t_client *this)
   this->fdmax = NULL;
   this->rfds = NULL;
   this->connected = 0;
-  this->channel = strdup("home");
+  this->channel = strdup("Lobby");
   this->nickname = getlogin();
   return (ret);
 }
@@ -92,11 +116,14 @@ int 						main()
   this.client = init_client(&this);
   this.client->fd = 0;
   this.rb = rb_init();
+  this.rs = rb_init();
   non_canon_mode(0);
   run(&this);
   non_canon_mode(1);
   if (this.connected)
     close(this.client->fd);
   printf("Goodbye %s ;)\n", this.nickname);
+  if (this.connected)
+    free_arrays("ss", this.nickname, this.channel);
   return (0);
 }

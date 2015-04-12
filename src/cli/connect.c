@@ -62,14 +62,21 @@ char								*connect_server(void *this, void *request)
 	ret = NULL;
 	c = (t_client *)this;
 	r = (t_request *)request;
-	if (!(tmp = str_to_tab(r->arg[0], ':'))) // A REPRENDRE ~ PENSER A GERER PAS DE PORTS ~ SEGFAULT SUR /SERVER SEUL
-		return (ret = strdup("00PS: str_to_tab() failed :(."));
+	if (!r->arg || !r->arg[0])
+		return (strdup("00PS: Error [/server] invalid cmd.\r\nCf help."));
+	if (!(tmp = str_to_tab(r->arg[0], ':')))
+		return (strdup("00PS: str_to_tab() failed :(."));
 	r->arg = tmp;
 	free_arrays("t", tmp);
-	if (!r->arg || !r->arg[0] || !r->arg[1])
-		return (ret = strdup("00PS: Error [/server] invalid cmd.\r\nCf help."));
+	if (!r->arg[1])
+	{
+		if (!(r->arg = realloc(r->arg, sizeof(r->arg) + sizeof(char *) * 2)))
+			error("realloc");
+		r->arg[1] = strdup("6667");
+		r->arg[2] = NULL;
+	}
 	if (!connect_it(c->client, r->arg[0], r->arg[1]))
-		return (ret = strdup("00PS: Error cannot connect specifed IP/PORT :(."));		
+		return (strdup("00PS: Error cannot connect specifed IP/PORT :(."));		
 	ret = connect_server_handler(c);
 	return (ret);
 }

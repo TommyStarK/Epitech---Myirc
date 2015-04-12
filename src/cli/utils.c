@@ -4,11 +4,31 @@
 ** Made by Emmanuel Chambon
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
-** Started on  Sat Apr 11 18:16:31 2015 Emmanuel Chambon
-** Last update Sat Apr 11 18:16:43 2015 Emmanuel Chambon
+** Started on  Sat Apr 11 18:16:31 2015 EMMANUEL CHAMBON
+** Last update Sat Apr 11 18:16:43 2015 THOMAS MILOX
 */
 
 #include "client.h"
+
+void            non_canon_mode(char c)
+{
+  struct termios t;
+
+  tcgetattr(STDIN_FILENO, &t);
+  if (!c)
+  {
+    t.c_lflag &= ~ICANON;
+    t.c_lflag &= ~ECHO;
+    t.c_cc[VMIN] = 1;
+
+  }
+  else if (c == 1)
+    {
+      t.c_lflag |= ICANON;
+      t.c_lflag |= ECHO;
+    }
+  tcsetattr(STDIN_FILENO, TCSANOW, &t);
+}
 
 void            free_it(char **it)
 {

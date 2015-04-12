@@ -5,7 +5,7 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:04:36 2015 THOMAS MILOX
-** Last update Sat Apr 11 18:18:45 2015 Emmanuel Chambon
+** Last update Sat Apr 11 18:18:45 2015 THOMAS MILOX
 */
 
 #ifndef __CLIENT_H__
@@ -47,6 +47,7 @@ typedef struct		s_client
 	fd_set 					*rfds;
 	t_socket				*client;
 	t_ring_buffer 	*rb;
+	t_ring_buffer 	*rs;
 }									t_client;
 
 /*
@@ -55,22 +56,21 @@ typedef struct		s_client
 
 t_socket						*init_client(t_client *);
 void 								run(t_client *);
-void	 							non_canon_mode(char);
+int 								handle_cmd(t_client *);
+int             		read_answer(t_client *);
 /*
 ** cmd_handler.c
 */
-int 								handle_cmd(t_client *);
 int 								known_cmd(t_client *, t_request *, int);
 int 								unknown_cmd(t_client *, t_request *);
+void 								unknown_cmd_handler(t_client *, t_request *);
 t_request       		*parse_cmd(char *);
 void            		pars_hdl(t_request *, char **, char *, int);
-
 /*
 ** connect.c
 */
 char								*connect_server(void *, void *);
 int             		connect_it(t_socket *, const char *, const char *);
-
 /*
 ** commands.c
 */
@@ -78,17 +78,18 @@ char								*change_nickname(void *, void *);
 char								*list_channels(void *, void *);
 char								*join_channel(void *, void *);
 char								*leave_channel(void *, void *);
-
 /*
 ** commands_bis.c
 */
-
 char								*list_users(void *, void *);
 char								*send_msg_to_user(void *, void *);
 char								*send_file_to_user(void *, void *);
 char								*accept_file_from_user(void *, void *);
 char								*quit_client(void *, void *);
-
+/*
+** utils.c
+*/
+void	 							non_canon_mode(char);
 char                **str_to_tab(char *, char);
 void                free_it(char **);
 void                free_arrays(char *, ...);

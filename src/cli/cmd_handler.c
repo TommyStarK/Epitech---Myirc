@@ -55,28 +55,46 @@ t_request       *parse_cmd(char *in)
   return (ret);
 }
 
-int 						known_cmd(t_client *this, t_request *r, int index)
+void            unknown_cmd_handler(t_client *c, t_request *r)
 {
-	char 					*formated_cmd;
+  int           i;
+  int           s;
+  char          *f;
 
-	formated_cmd = this->cmd[index].op(this, r);
-	if (!strncmp(formated_cmd, "00PS", 4))
-		{
-			printf("%s\n", formated_cmd);
-			free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
-			return (0);
-		}
-  ssend(this->client->fd, formated_cmd);
-	free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
-  return (index == 9 ? 9 : 1);
+  f = strdup(r->cmd);
+  if (s = strlen(f), r->arg && r->arg[0])
+  {
+    for (i = 0; r->arg[i]; i++)
+    {
+      !(f = realloc(f, s + strlen(r->arg[i]) + 2)) ? error("realloc") : 0;
+      r->arg[i] ? strcat(f, " ") : 0;
+      f[s += 1] = 0;
+      !(f = strcat(f, r->arg[i])) ? error("strcat") : 0;
+      f[s += strlen(r->arg[i])] = 0;
+      }
+    }
+  !(f = realloc(f, s + 3)) ? error("realloc") : 0;
+  f = strcat(f, "\r\n\0");
+  ssend(c->client->fd, f);
+  free_arrays("sstr", f, r->cmd, r->arg, r);
 }
 
 int 						unknown_cmd(t_client *this, t_request *r)
 {
   if (this->connected)
     {
-      printf("Unknown cmd: [%s]\n", r->cmd);
-      free_arrays("str", r->cmd, r->arg, r);;
+      if (r->cmd[0] == '/')
+      {
+        unknown_cmd_handler(this, r);
+        return (1);
+      }
+      else
+      {
+        !(r->cmd = realloc(r->cmd, strlen(r->cmd) + 3)) ? error("reallc") : 0; 
+        r->cmd = strcat(r->cmd, "\r\n\0");
+        ssend(this->client->fd, r->cmd);
+        free_arrays("str", r->cmd, r->arg, r);
+      }
       return (1);
     }
   fprintf(stderr, "%s: Connect to IRC server first.\n", r->cmd);
@@ -84,29 +102,18 @@ int 						unknown_cmd(t_client *this, t_request *r)
   return (1);
 }
 
-
-int 						handle_cmd(t_client *this)
+int             known_cmd(t_client *this, t_request *r, int index)
 {
-  char          c;
-  int 					index;
-  t_request     *r;
+  char          *formated_cmd;
 
-  c = (char)getchar();
-  if (c == 127)
-  {
-    write(1, "\b \b", 3);
-    rb_delete_last(this->rb);
-    return (1);
-  }
-  c != 27 ? putchar(c) : getchar();
-  c != 27 ? rb_write_c(this->rb, c) : getchar();
-  if (rb_available(this->rb) && c != '\n')
-    return (1);
-  r = parse_cmd(rb_read(this->rb));
-  for (index = 0; index < 10; ++index)
+  formated_cmd = this->cmd[index].op(this, r);
+  if (!strncmp(formated_cmd, "00PS", 4))
     {
-      if (!strcmp(r->cmd, this->cmd[index].cmd))
-      	return (known_cmd(this, r, index));
+      printf("%s\n", formated_cmd);
+      free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
+      return (1);
     }
-  return (unknown_cmd(this, r));
+  ssend(this->client->fd, formated_cmd);
+  free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
+  return (index == 9 ? 9 : 1);
 }
