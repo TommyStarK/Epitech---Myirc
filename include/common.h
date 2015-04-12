@@ -19,6 +19,7 @@
 # include <string.h>
 # include <stdint.h>
 # include <signal.h>
+# include <curses.h>
 # include <termios.h>
 # include "network.h"
 

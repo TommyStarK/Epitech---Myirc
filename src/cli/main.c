@@ -18,10 +18,15 @@ void            non_canon_mode(char c)
   if (!c)
   {
     t.c_lflag &= ~ICANON;
+    t.c_lflag &= ~ECHO;
     t.c_cc[VMIN] = 1;
+
   }
   else if (c == 1)
-    t.c_lflag |= ICANON;
+    {
+      t.c_lflag |= ICANON;
+      t.c_lflag |= ECHO;
+    }
   tcsetattr(STDIN_FILENO, TCSANOW, &t);
 }
 

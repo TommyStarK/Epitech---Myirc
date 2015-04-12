@@ -15,7 +15,7 @@ t_ring_buffer		*rb_init()
   t_ring_buffer		*buffer;
 
   if (!(buffer = malloc(sizeof(t_ring_buffer))))
-    error("buffer");
+    error("malloc");
   memset(buffer->rb, 0, RB_SIZE);
   buffer->rrb = buffer->rb;
   buffer->wrb = buffer->rb;
@@ -66,7 +66,6 @@ char			*rb_read(t_ring_buffer *ring)
   size = ((ring->wrb >= ring->rrb)
 	  ? (int)(ring->wrb - ring->rrb)
 	  : (RB_SIZE - (int)(ring->rrb - ring->wrb)));
-  printf("size = %d\n", size);
   if (!(str = malloc(size + 1)))
     error("malloc");
   memset(str, 0, size + 1);

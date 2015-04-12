@@ -54,6 +54,7 @@ typedef struct		s_client
 
 t_socket						*init_client(t_client *);
 void 								run(t_client *);
+void	 							non_canon_mode(char);
 /*
 ** cmd_handler.c
 */

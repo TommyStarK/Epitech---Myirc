@@ -5,7 +5,7 @@
 ## chambo_e  <chambon.emmanuel@gmail.com>
 ## 
 ## Started on  Wed Apr  8 22:49:16 2015 Emmanuel Chambon
-## Last update Sat Apr 11 23:33:32 2015 THOMAS MILOX
+## Last update Sun Apr 12 02:17:57 2015 THOMAS MILOX
 ##
 
 CC		=	gcc -g
@@ -57,7 +57,7 @@ server		:	$(OBJS)
 			$(CC) $(CFLAGS) $(OBJS) -o $(NAME_SERVER)
 
 client		:	$(OBJC)
-			$(CC) $(CFLAGS) $(OBJC) -o $(NAME_CLIENT)
+			$(CC) $(CFLAGS) $(OBJC) -o $(NAME_CLIENT) -lncurses
 
 clean		:
 			$(RM) $(OBJS) $(OBJC)

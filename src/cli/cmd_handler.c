@@ -96,9 +96,14 @@ int 						handle_cmd(t_client *this)
   c = 1;
   c = (char)getchar();
   if (c == 127)
-    printf("AAAAAAAAAAAAAAA\n");
-  c == 127 ? rb_write_c(this->rb, '\b') : rb_write_c(this->rb, c);
-  if (rb_available(this->rb) && c != '\n') 
+  {
+    write(1, "\b \b", 3);
+    rb_delete_last(this->rb);
+    return (0);
+  }
+  c != 27 ? putchar(c) : getchar();
+  c != 27 ? rb_write_c(this->rb, c) : getchar();
+  if (rb_available(this->rb) && c != '\n')
     return (0);
   r = parse_cmd(rb_read(this->rb));
   for (index = 0; index < 10; ++index)
