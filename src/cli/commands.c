@@ -13,28 +13,70 @@
 
 char								*change_nickname(void *a, void *b)
 {
-	a = a;
-	b = b;
-	return (NULL);
+	char 							*ret;
+	t_client 					*c;
+	t_request 				*r;
+
+	ret = NULL;
+	c = (t_client *)a;
+	r = (t_request *)b;
+	if (r->arg && r->arg[0])
+	{
+		!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
+		sprintf(ret, "NICK %s\r\n", r->arg[0]);
+		c->nickname = strdup(r->arg[0]);
+		return (ret);
+	}
+	return (strdup("00PS: Error [/nick] invalid cmd.\r\nCf help."));
 }
 
-char								*list_channels(void *a, void *b)
+char								*list_channels(void __attribute__((unused))*a, void *b)
 {
-	a = a;
-	b = b;
-	return (NULL);
+	char 							*ret;
+	t_request 				*r;
+
+	ret = NULL;
+	r = (t_request *)b;
+	if (r->arg && r->arg[0])
+	{
+		!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
+		sprintf(ret, "LIST %s\r\n", r->arg[0]);
+		return (ret);
+	}
+	return (strdup("LIST\r\n"));
 }
 
 char								*join_channel(void *a, void *b)
 {
-	a = a;
-	b = b;
-	return (NULL);
+	char 							*ret;
+	t_client 					*c;
+	t_request 				*r;
+
+	ret = NULL;
+	c = (t_client *)a;
+	r = (t_request *)b;
+	if (r->arg && r->arg[0])
+	{
+		!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
+		sprintf(ret, "JOIN %s\r\n", r->arg[0]);
+		c->channel = strdup(r->arg[0]);
+		return (ret);
+	}
+	return (strdup("00PS: Error [/part] invalid cmd.\r\nCf help."));
 }
 
-char								*leave_channel(void *a, void *b)
+char								*leave_channel(void __attribute__((unused))*a, void *b)
 {
-	a = a;
-	b = b;
-	return (NULL);
+	char 							*ret;
+	t_request 				*r;
+
+	ret = NULL;
+	r = (t_request *)b;
+	if (r->arg && r->arg[0])
+	{
+		!(ret = malloc(256)) ? error("malloc") : bzero(ret, 256);
+		sprintf(ret, "PART %s\r\n", r->arg[0]);
+		return (ret);
+	}
+	return (strdup("00PS: Error [/part] invalid cmd.\r\nCf help."));
 }

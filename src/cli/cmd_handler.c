@@ -60,17 +60,14 @@ int 						known_cmd(t_client *this, t_request *r, int index)
 	char 					*formated_cmd;
 
 	formated_cmd = this->cmd[index].op(this, r);
-	if (!formated_cmd)
-  	return(printf("%d -%s\n", index, r->cmd));
 	if (!strncmp(formated_cmd, "00PS", 4))
 		{
 			printf("%s\n", formated_cmd);
 			free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
 			return (0);
 		}
-  printf("SEND: [%s]\n", formated_cmd);
   ssend(this->client->fd, formated_cmd);
-  printf("SENT: [%s]\n", formated_cmd);
+  printf("[%s]\n", formated_cmd);
 	free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
   return (index == 9 ? 9 : 1);
 }

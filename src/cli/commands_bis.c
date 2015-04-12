@@ -10,11 +10,10 @@
 
 #include "client.h"
 
-char								*list_users(void *a, void *b)
+char								*list_users(void __attribute__((unused))*a,
+																void __attribute__((unused))*b)
 {
-	a = a;
-	b = b;
-	return (NULL);
+	return (strdup("NAMES\r\n"));
 }
 
 char								*send_msg_to_user(void *a, void *b)

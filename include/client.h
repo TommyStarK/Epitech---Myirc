@@ -39,11 +39,12 @@ typedef struct		s_socket
 
 typedef struct		s_client
 {
-	char 						connected;
-	char						*nickname;
 	int 						*fdmax;
-	fd_set 					*rfds;
+	char 						connected;
+	char 						*channel;
+	char						*nickname;
 	t_fct						*cmd;
+	fd_set 					*rfds;
 	t_socket				*client;
 	t_ring_buffer 	*rb;
 }									t_client;

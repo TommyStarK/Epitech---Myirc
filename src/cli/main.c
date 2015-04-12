@@ -80,6 +80,7 @@ t_socket				*init_client(t_client *this)
   this->fdmax = NULL;
   this->rfds = NULL;
   this->connected = 0;
+  this->channel = strdup("home");
   this->nickname = getlogin();
   return (ret);
 }
