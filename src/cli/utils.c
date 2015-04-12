@@ -56,11 +56,17 @@ void            free_arrays(char *fmt, ...)
   while (*fmt++)
     {
       if (*fmt == 's')
-	free(s = va_arg(ap, char *));
+      	{  
+          s = va_arg(ap, char *);
+          s != NULL ? free(s) : 0;
+        }
       else if (*fmt == 't')
-	free_it(t = va_arg(ap, char **));
+      	free_it(t = va_arg(ap, char **));
       else if (*fmt == 'r')
-	free(r = va_arg(ap, t_request *));
+	     {
+        r = va_arg(ap, t_request *);
+        r != NULL ? free(r) : 0;
+       }
     }
   va_end(ap);
 }

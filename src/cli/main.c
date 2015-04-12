@@ -24,9 +24,17 @@ int             read_answer(t_client *this)
         printf("%s", rb_read(this->rs));
         return (1);
       }
-    }
+  }
+  else if (!i)
+  {
+    printf("00PS: Connection closed by server.\n");
+    return (-1);
+  }
   else
-    !i ? printf("00PS: Connection closed by server.\n") : error("recv");
+  {
+    error("recv");
+    return (-1);
+  }
   return (1);
 }
 
@@ -57,7 +65,7 @@ int             handle_cmd(t_client *this)
   return (unknown_cmd(this, r));
 }
 
-void            run(t_client *this)
+void            run(t_client *c)
 {
   int           i;
   int           ret;
@@ -67,17 +75,19 @@ void            run(t_client *this)
   fdmax = 1;
   FD_ZERO(&read_fds);
   FD_SET(0, &read_fds);
-  this->fdmax = &fdmax;
-  this->rfds = &read_fds;
+  c->fdmax = &fdmax;
+  c->rfds = &read_fds;
   for (;;)
   {
-    if (select(fdmax, &read_fds, NULL, NULL, NULL) == -1)
+    FD_ZERO(c->rfds);
+    c->client->fd < 0 ? 0 : FD_SET(c->client->fd, c->rfds);
+    if (FD_SET(0, c->rfds), select(fdmax, c->rfds, NULL, NULL, NULL) == -1)
       error("select");
-    for (i = 0; i <= *this->fdmax; i++)
+    for (i = 0; i <= *c->fdmax; i++)
     {
       if (FD_ISSET(i, &read_fds))
       {
-        ret = (!i ? handle_cmd(this) : read_answer(this));
+        ret = (!i ? handle_cmd(c) : read_answer(c));
         if (ret == 9 || ret < 0)
           return ;
       }
@@ -126,7 +136,5 @@ int 						main()
   if (this.connected)
     close(this.client->fd);
   printf("Goodbye %s ;)\n", this.nickname);
-  if (this.connected)
-    free_arrays("ss", this.nickname, this.channel);
   return (0);
 }
