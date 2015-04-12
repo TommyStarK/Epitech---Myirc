@@ -5,14 +5,14 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Sat Apr 11 18:16:31 2015 EMMANUEL CHAMBON
-** Last update Sat Apr 11 18:16:43 2015 THOMAS MILOX
+** Last update Sun Apr 12 18:22:39 2015 THOMAS MILOX
 */
 
 #include "client.h"
 
-void            non_canon_mode(char c)
+void			non_canon_mode(char c)
 {
-  struct termios t;
+  struct termios	t;
 
   tcgetattr(STDIN_FILENO, &t);
   if (!c)
@@ -30,9 +30,9 @@ void            non_canon_mode(char c)
   tcsetattr(STDIN_FILENO, TCSANOW, &t);
 }
 
-void            free_it(char **it)
+void			free_it(char **it)
 {
-  int           i;
+  int			i;
 
   i = 0;
   if (!i || !(*it))
@@ -45,19 +45,19 @@ void            free_it(char **it)
   free(it);
 }
 
-void            free_arrays(char *fmt, ...)
+void			free_arrays(char *fmt, ...)
 {
-  va_list       ap;
-  char          *s;
-  char          **t;
-  t_request       *r;
+  va_list		ap;
+  char			*s;
+  char			**t;
+  t_request		*r;
 
   va_start(ap, fmt);
   while (*fmt++)
     {
       if (*fmt == 's')
-      	{  
-          s = va_arg(ap, char *);
+	{
+	  s = va_arg(ap, char *);
           s != NULL ? free(s) : 0;
         }
       else if (*fmt == 't')

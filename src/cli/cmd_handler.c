@@ -5,12 +5,12 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Sat Apr 11 01:41:50 2015 THOMAS MILOX
-** Last update Sat Apr 11 01:42:04 2015 THOMAS MILOX
+** Last update Sun Apr 12 17:50:00 2015 THOMAS MILOX
 */
 
 #include "client.h"
 
-void            pars_hdl(t_request *ret, char **cmd, char *in, int flag)
+void		pars_hdl(t_request *ret, char **cmd, char *in, int flag)
 {
   int           i;
 
@@ -34,7 +34,7 @@ void            pars_hdl(t_request *ret, char **cmd, char *in, int flag)
   ret->arg[i - 1] = NULL;
 }
 
-t_request       *parse_cmd(char *in)
+t_request	*parse_cmd(char *in)
 {
   char          **tmp;
   t_request     *ret;
@@ -55,7 +55,7 @@ t_request       *parse_cmd(char *in)
   return (ret);
 }
 
-void            unknown_cmd_handler(t_client *c, t_request *r)
+void		unknown_cmd_handler(t_client *c, t_request *r)
 {
   int           i;
   int           s;
@@ -79,7 +79,7 @@ void            unknown_cmd_handler(t_client *c, t_request *r)
   free_arrays("sstr", f, r->cmd, r->arg, r);
 }
 
-int 						unknown_cmd(t_client *this, t_request *r)
+int		unknown_cmd(t_client *this, t_request *r)
 {
   if (this->connected)
     {
@@ -90,7 +90,7 @@ int 						unknown_cmd(t_client *this, t_request *r)
       }
       else
       {
-        !(r->cmd = realloc(r->cmd, strlen(r->cmd) + 3)) ? error("reallc") : 0; 
+        !(r->cmd = realloc(r->cmd, strlen(r->cmd) + 3)) ? error("reallc") : 0;
         r->cmd = strcat(r->cmd, "\r\n\0");
         ssend(this->client->fd, r->cmd);
         free_arrays("str", r->cmd, r->arg, r);

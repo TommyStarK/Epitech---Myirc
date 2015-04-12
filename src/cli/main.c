@@ -5,15 +5,15 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:05:41 2015 THOMAS MILOX
-** Last update Sun Apr 12 13:11:09 2015 Emmanuel Chambon
+** Last update Sun Apr 12 18:20:02 2015 THOMAS MILOX
 */
 
 #include "client.h"
 
-int             read_answer(t_client *this)
+int		read_answer(t_client *this)
 {
-  int     i;
-  char    tmp[RB_SIZE];
+  int		i;
+  char		tmp[RB_SIZE];
 
  memset(tmp, 0, RB_SIZE);
  if ((i = recv(this->client->fd, tmp, rb_available(this->rs), 0)) > 0)
@@ -77,7 +77,7 @@ void            run(t_client *c)
   FD_SET(0, &read_fds);
   c->fdmax = &fdmax;
   c->rfds = &read_fds;
-  for (;;)
+  for ( ; ; )
   {
     FD_ZERO(c->rfds);
     c->client->fd < 0 ? 0 : FD_SET(c->client->fd, c->rfds);
@@ -95,9 +95,9 @@ void            run(t_client *c)
   }
 }
 
-t_socket				*init_client(t_client *this)
+t_socket	*init_client(t_client *this)
 {
-  t_socket			*ret;
+  t_socket	*ret;
   static t_fct	cmd[] = {
     {"/server", &connect_server},
     {"/nick", &change_nickname},
@@ -122,9 +122,9 @@ t_socket				*init_client(t_client *this)
   return (ret);
 }
 
-int 						main()
+int		main()
 {
-  t_client 			this;
+  t_client	this;
 
   this.client = init_client(&this);
   this.client->fd = -1;
