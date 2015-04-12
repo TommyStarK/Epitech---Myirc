@@ -67,7 +67,6 @@ int 						known_cmd(t_client *this, t_request *r, int index)
 			return (0);
 		}
   ssend(this->client->fd, formated_cmd);
-  printf("[%s]\n", formated_cmd);
 	free_arrays("sstr", formated_cmd, r->cmd, r->arg, r);
   return (index == 9 ? 9 : 1);
 }
@@ -76,7 +75,7 @@ int 						unknown_cmd(t_client *this, t_request *r)
 {
   if (this->connected)
     {
-      printf("CONNECTED TO SERVER\n");
+      printf("Unknown cmd: [%s]\n", r->cmd);
       free_arrays("str", r->cmd, r->arg, r);;
       return (1);
     }

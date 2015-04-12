@@ -62,7 +62,7 @@ char								*connect_server(void *this, void *request)
 	ret = NULL;
 	c = (t_client *)this;
 	r = (t_request *)request;
-	if (!(tmp = str_to_tab(r->arg[0], ':')))
+	if (!(tmp = str_to_tab(r->arg[0], ':'))) // A REPRENDRE ~ PENSER A GERER PAS DE PORTS ~ SEGFAULT SUR /SERVER SEUL
 		return (ret = strdup("00PS: str_to_tab() failed :(."));
 	r->arg = tmp;
 	free_arrays("t", tmp);
