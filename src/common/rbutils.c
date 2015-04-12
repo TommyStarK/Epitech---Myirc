@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Thu Apr  9 14:11:57 2015 Emmanuel Chambon
-** Last update Sun Apr 12 01:48:24 2015 Emmanuel Chambon
+** Last update Sun Apr 12 02:14:33 2015 Emmanuel Chambon
 */
 
 #include "common.h"
@@ -66,6 +66,7 @@ char			*rb_read(t_ring_buffer *ring)
   size = ((ring->wrb >= ring->rrb)
 	  ? (int)(ring->wrb - ring->rrb)
 	  : (RB_SIZE - (int)(ring->rrb - ring->wrb)));
+  printf("size = %d\n", size);
   if (!(str = malloc(size + 1)))
     error("malloc");
   memset(str, 0, size + 1);
@@ -94,6 +95,12 @@ void			rb_set_at(t_ring_buffer *ring, int idx, char c)
 		- (size_t)ring->rb) % RB_SIZE] = c)
    : (ring->rb[(((size_t)ring->wrb + idx)
 		- (size_t)ring->rb) % RB_SIZE] = c));
+}
+
+void			rb_delete_last(t_ring_buffer *ring)
+{
+  ring->wrb = &ring->rb[(((size_t)ring->wrb - 1)
+			 - (size_t)ring->rb) % RB_SIZE];
 }
 
 void			rb_display(t_ring_buffer *ring)
