@@ -5,7 +5,7 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Sun Apr 12 04:58:15 2015 Emmanuel Chambon
-** Last update Sun Apr 12 20:04:39 2015 Emmanuel Chambon
+** Last update Sun Apr 12 20:27:52 2015 Emmanuel Chambon
 */
 
 #include "server.h"
@@ -38,7 +38,7 @@ void		list(void *params, t_user *user, t_server *serv)
   ssend(user->socket, "323 End of /LIST\r\n");
 }
 
-void	names(void _UNUSED_*params, t_user *user, t_server _UNUSED_*serv)
+void		names(void _UNUSED_*params, t_user *user, t_server _UNUSED_*serv)
 {
   t_user	*tmp;
 
