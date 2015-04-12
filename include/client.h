@@ -5,7 +5,7 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:04:36 2015 THOMAS MILOX
-** Last update Sun Apr 12 18:08:54 2015 THOMAS MILOX
+** Last update Sun Apr 12 18:55:02 2015 THOMAS MILOX
 */
 
 #ifndef __CLIENT_H__
@@ -91,5 +91,6 @@ char				*quit_client(void *, void *);
 void				non_canon_mode(char);
 void				free_it(char **);
 void				free_arrays(char *, ...);
+void				end_clien(t_client *, int);
 
 #endif /* ! __CLIENT_H__ */

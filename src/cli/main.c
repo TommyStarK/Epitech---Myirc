@@ -5,7 +5,7 @@
 ** Login   <loxmi@epitech.net>
 **
 ** Started on  Fri Apr 10 18:05:41 2015 THOMAS MILOX
-** Last update Sun Apr 12 18:20:02 2015 THOMAS MILOX
+** Last update Sun Apr 12 18:54:42 2015 THOMAS MILOX
 */
 
 #include "client.h"
@@ -88,8 +88,7 @@ void            run(t_client *c)
       if (FD_ISSET(i, &read_fds))
       {
         ret = (!i ? handle_cmd(c) : read_answer(c));
-        if (ret == 9 || ret < 0)
-          return ;
+	end_client(c, ret);
       }
     }
   }
@@ -132,9 +131,5 @@ int		main()
   this.rs = rb_init();
   non_canon_mode(0);
   run(&this);
-  non_canon_mode(1);
-  if (this.connected)
-    close(this.client->fd);
-  printf("Goodbye %s ;)\n", this.nickname);
   return (0);
 }

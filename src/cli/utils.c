@@ -5,10 +5,30 @@
 ** chambo_e  <chambon.emmanuel@gmail.com>
 **
 ** Started on  Sat Apr 11 18:16:31 2015 EMMANUEL CHAMBON
-** Last update Sun Apr 12 18:22:39 2015 THOMAS MILOX
+** Last update Sun Apr 12 18:53:44 2015 THOMAS MILOX
 */
 
 #include "client.h"
+
+void			end_client(t_client *this, int i)
+{
+  if (i == 9)
+    {
+      non_canon_mode(1);
+      if (this->connected)
+	close(this->client->fd);
+      printf("Goodbye %s ;)\n", this->nickname);
+      exit(EXIT_SUCCESS);
+    }
+  else if (i < 0)
+    {
+      non_canon_mode(1);
+      if (this->connected)
+	close(this->client->fd);
+      printf("Goodbye %s ;)\n", this->nickname);
+      exit(EXIT_FAILURE);
+    }
+}
 
 void			non_canon_mode(char c)
 {
